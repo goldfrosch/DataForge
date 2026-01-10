@@ -1,0 +1,17 @@
+appId: com.example.data-forge
+productName: data-forge
+directories:
+  buildResources: build
+  output: release
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - package.json
+mac:
+  category: public.app-category.utilities
+win:
+  target:
+    - nsis
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
