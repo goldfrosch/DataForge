@@ -1,0 +1,62 @@
+import { createGlobalTheme } from "@vanilla-extract/css";
+
+export const vars = createGlobalTheme(":root", {
+  color: {
+    background: "#1a1a1a",
+    foreground: "#ededed",
+    card: "#242424",
+    cardForeground: "#ededed",
+    popover: "#2a2a2a",
+    popoverForeground: "#ededed",
+    primary: "#ededed",
+    primaryForeground: "#1a1a1a",
+    secondary: "#333333",
+    secondaryForeground: "#d4d4d4",
+    muted: "#2e2e2e",
+    mutedForeground: "#8a8a8a",
+    accent: "#4ade80",
+    accentForeground: "#1a1a1a",
+    destructive: "#dc2626",
+    destructiveForeground: "#fafafa",
+    border: "#3a3a3a",
+    input: "#2e2e2e",
+    ring: "#4ade80",
+    chart1: "#4ade80",
+    chart2: "#60a5fa",
+    chart3: "#facc15",
+    chart4: "#a78bfa",
+    chart5: "#fb923c",
+    sidebar: "#161616",
+    sidebarForeground: "#ededed",
+    sidebarPrimary: "#4ade80",
+    sidebarPrimaryForeground: "#1a1a1a",
+    sidebarAccent: "#2a2a2a",
+    sidebarAccentForeground: "#ededed",
+    sidebarBorder: "#333333",
+    sidebarRing: "#4ade80",
+  },
+  token: {
+    width: {
+      large: "1440px",
+    },
+  },
+  font: {
+    sm: {
+      fontSize: "0.875rem",
+      lineHeight: "calc(1.25 / 0.875)",
+    },
+    xl2: {
+      fontSize: "1.5rem",
+      lineHeight: "calc(2 / 1.5)",
+    },
+  },
+  size: {
+    1: "0.25rem",
+    2: "0.5rem",
+    3: "0.75rem",
+    4: "1rem",
+    5: "1.25rem",
+    6: "1.5rem",
+    7: "1.75rem",
+  },
+});
