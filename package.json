@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.18.0",
+    "classnames": "^2.5.1",
     "electron": "^33.3.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",

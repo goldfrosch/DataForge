@@ -1,8 +1,12 @@
+import { MainPage } from "./pages/MainPage";
+import "./App.css";
+import { DefaultLayout } from "./layouts/DefaultLayout";
+
 function App() {
   return (
-    <>
-      <div>123</div>
-    </>
+    <DefaultLayout>
+      <MainPage />
+    </DefaultLayout>
   );
 }
 

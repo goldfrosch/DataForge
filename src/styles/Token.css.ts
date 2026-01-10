@@ -51,8 +51,10 @@ export const vars = createGlobalTheme(":root", {
     },
   },
   size: {
+    radius: "0.5rem",
     1: "0.25rem",
     2: "0.5rem",
+    "2.5": "0.625rem",
     3: "0.75rem",
     4: "1rem",
     5: "1.25rem",
