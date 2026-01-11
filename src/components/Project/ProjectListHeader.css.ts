@@ -1,7 +1,7 @@
 import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/Token.css";
 
-export const categoryHeaderLayout = style({
+export const projectListHeaderLayout = style({
   display: "flex",
   justifyContent: "center",
   backgroundColor: vars.color.card,
@@ -9,7 +9,7 @@ export const categoryHeaderLayout = style({
   padding: vars.size[6],
 });
 
-export const categoryHeaderContent = style({
+export const projectListHeaderContent = style({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -17,13 +17,13 @@ export const categoryHeaderContent = style({
   maxWidth: vars.token.width.large,
 });
 
-export const categoryHeaderInformation = style({
+export const projectListHeaderInformation = style({
   display: "flex",
   alignItems: "center",
   gap: vars.size[4],
 });
 
-export const categoryHeaderIconLayout = style({
+export const projectListHeaderIconLayout = style({
   padding: vars.size[3],
   backgroundColor: `color-mix(in oklab, ${vars.color.accent} 20%, transparent)`,
   borderRadius: 16,
@@ -33,23 +33,23 @@ export const categoryHeaderIconLayout = style({
   justifyContent: "center",
 });
 
-export const categoryHeaderIcon = style({
+export const projectListHeaderIcon = style({
   width: vars.size[7],
   height: vars.size[7],
   color: vars.color.accent,
 });
 
-export const categoryHeaderTitle = style({
+export const projectListHeaderTitle = style({
   color: vars.color.foreground,
   ...vars.font.xl2,
 });
 
-export const categoryHeaderDescription = style({
+export const projectListHeaderDescription = style({
   color: vars.color.mutedForeground,
   marginTop: 2,
   ...vars.font.sm,
 });
 
-export const categoryHeaderAddProjectButton = style({
+export const projectListHeaderAddProjectButton = style({
   gap: vars.size[1],
 });

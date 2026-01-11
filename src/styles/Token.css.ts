@@ -45,6 +45,10 @@ export const vars = createGlobalTheme(":root", {
       fontSize: "0.875rem",
       lineHeight: "calc(1.25 / 0.875)",
     },
+    xs: {
+      fontSize: "0.75rem",
+      lineHeight: "calc(1 / 0.75)",
+    },
     xl2: {
       fontSize: "1.5rem",
       lineHeight: "calc(2 / 1.5)",
@@ -52,13 +56,21 @@ export const vars = createGlobalTheme(":root", {
   },
   size: {
     radius: "0.5rem",
+    "0.5": "0.125rem",
     1: "0.25rem",
+    "1.5": "0.375rem",
     2: "0.5rem",
     "2.5": "0.625rem",
     3: "0.75rem",
+    "3.5": "0.875rem",
     4: "1rem",
     5: "1.25rem",
     6: "1.5rem",
     7: "1.75rem",
+    8: "2rem",
+  },
+  transition: {
+    defaultTiming: "cubic-bezier(0.4, 0, 0.2, 1)",
+    defaultDuration: "150ms",
   },
 });
