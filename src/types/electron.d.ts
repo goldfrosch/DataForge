@@ -1,15 +1,14 @@
+import type { IProject } from "./Project.type";
+
 export interface IElectronAPI {
-  ipcRenderer: {
-    on(channel: string, func: (...args: unknown[]) => void): void;
-    off(channel: string, func: (...args: unknown[]) => void): void;
-    send(channel: string, ...args: unknown[]): void;
-    invoke(channel: string, ...args: unknown[]): Promise<unknown>;
+  electronEvent: {
+    ping(): void;
+    loadAllProjects(): { projects: IProject[] };
   };
 }
 
 declare global {
   interface Window {
-    electronAPI: IElectronAPI;
-    ipcRenderer: IElectronAPI["ipcRenderer"];
+    electronEvent: IElectronAPI["electronEvent"];
   }
 }

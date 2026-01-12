@@ -1,5 +1,5 @@
 export interface IProject {
-  id: number;
+  uuid: number;
   type: "unreal";
   isConnect: boolean;
   projectName: string;

@@ -15,7 +15,7 @@ export function ProjectList({ list }: ProjectListProps) {
   return (
     <div className={styles.projectListLayout}>
       {list.map((item) => (
-        <ProjectCard key={item.id} project={item} />
+        <ProjectCard key={item.uuid} project={item} />
       ))}
     </div>
   );

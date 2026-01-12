@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import electron from "vite-plugin-electron";
 import renderer from "vite-plugin-electron-renderer";
-import path from "node:path";
+import path, { resolve } from "node:path";
 
 export default defineConfig({
   plugins: [
@@ -19,6 +19,15 @@ export default defineConfig({
       },
       {
         entry: "electron/preload.ts",
+        vite: {
+          build: {
+            lib: {
+              entry: resolve(__dirname, "electron/preload.ts"),
+              formats: ["cjs"],
+              fileName: (format) => `preload.${format}`,
+            },
+          },
+        },
       },
     ]),
     renderer(),

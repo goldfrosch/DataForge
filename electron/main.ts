@@ -1,6 +1,8 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { readFile } from "fs/promises";
+import type { ConfigType } from "./types/config.type";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -10,7 +12,7 @@ process.env.VITE_PUBLIC = app.isPackaged
   : path.join(process.env.DIST, "../public");
 
 let win: BrowserWindow | null = null;
-const preload = path.join(__dirname, "preload.js");
+const preload = path.join(__dirname, "preload.cjs");
 const url = process.env.VITE_DEV_SERVER_URL;
 const iconPath = process.env.VITE_PUBLIC ?? "";
 const distPath = process.env.DIST ?? "";
@@ -53,4 +55,21 @@ app.on("activate", () => {
   }
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  ipcMain.handle("ping", () => {
+    console.log("pong!");
+  });
+  ipcMain.handle("loadAllProjects", async () => {
+    const result: ConfigType = JSON.parse(
+      await readFile(path.join(__dirname, "config.json"), "utf-8")
+    );
+
+    result.projects.flatMap((value) => {
+      value.tables = [2, 54, 3, 4, 56];
+    });
+
+    return result;
+  });
+
+  createWindow();
+});
