@@ -1,6 +1,6 @@
 import { MainPage } from "./pages/MainPage";
-import "./App.css";
 import { DefaultLayout } from "./layouts/DefaultLayout";
+import "./App.css";
 
 function App() {
   return (

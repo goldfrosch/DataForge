@@ -51,9 +51,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </p>
           </div>
         </div>
-        <button className={styles.projectCardInfoOptionLayout}>
+        <div className={styles.projectCardInfoOptionLayout}>
           <MoreHorizontal className={styles.projectCardInfoOptionIcon} />
-        </button>
+        </div>
       </div>
       <div className={styles.projectCardFooterLayout}>
         <Chip type={ProjectType[project.type].type}>
