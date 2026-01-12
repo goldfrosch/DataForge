@@ -1,7 +1,7 @@
 import { vars } from "@/styles/Token.css";
 import { style, styleVariants } from "@vanilla-extract/css";
 
-export const projectCardLayout = style({
+const projectCardLayoutBase = style({
   padding: vars.size[5],
   backgroundColor: vars.color.card,
   border: `1px solid`,
@@ -12,12 +12,24 @@ export const projectCardLayout = style({
 
   ":hover": {
     color: vars.color.accent,
-    borderColor: vars.color.accent,
   },
+});
 
-  ":disabled": {
-    opacity: "60%",
-  },
+export const projectCardLayout = styleVariants({
+  enable: [
+    projectCardLayoutBase,
+    {
+      ":hover": {
+        borderColor: vars.color.accent,
+      },
+    },
+  ],
+  disable: [
+    projectCardLayoutBase,
+    {
+      opacity: "60%",
+    },
+  ],
 });
 
 export const projectCardHeader = style({

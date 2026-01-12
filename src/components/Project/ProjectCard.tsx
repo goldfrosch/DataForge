@@ -31,7 +31,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <button className={styles.projectCardLayout} disabled={!project.isConnect}>
+    <button
+      className={
+        styles.projectCardLayout[project.isConnect ? "enable" : "disable"]
+      }
+      disabled={!project.isConnect}
+    >
       <div className={styles.projectCardHeader}>
         <div className={styles.projectCardInfoLayout}>
           <div className={styles.projectCardIconLayout}>
