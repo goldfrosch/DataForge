@@ -7,11 +7,11 @@ const baseChipStyle = style({
 });
 
 export const chipStyle = styleVariants({
-  gray: [
+  unreal: [
     baseChipStyle,
     {
-      backgroundColor: vars.color.secondary,
-      color: vars.color.mutedForeground,
+      backgroundColor: "#5f697d",
+      color: "#37435d",
     },
   ],
 });

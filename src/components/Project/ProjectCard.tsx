@@ -6,7 +6,7 @@ import type { IProject } from "@/types/Project.type";
 
 const ProjectType = {
   unreal: {
-    type: "gray",
+    type: "unreal",
     content: "Unreal Engine",
   },
 } as const;
@@ -31,19 +31,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <button
-      className={
-        styles.projectCardLayout[project.isConnect ? "enable" : "disable"]
-      }
-    >
+    <button className={styles.projectCardLayout} disabled={!project.isConnect}>
       <div className={styles.projectCardHeader}>
         <div className={styles.projectCardInfoLayout}>
           <div className={styles.projectCardIconLayout}>
             <Database className={styles.projectCardIcon} />
           </div>
           <div className={styles.projectCardInfoContentLayout}>
-            <h3 className={styles.projectCardInfoTitle}>project_title</h3>
-            <p className={styles.projectCardInfoDescription}>Directory Path</p>
+            <h3 className={styles.projectCardInfoTitle}>
+              {project.projectName}
+            </h3>
+            <p className={styles.projectCardInfoDescription}>
+              {project.projectPath}
+            </p>
           </div>
         </div>
         <button className={styles.projectCardInfoOptionLayout}>

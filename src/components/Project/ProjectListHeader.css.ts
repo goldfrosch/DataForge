@@ -11,10 +11,10 @@ export const projectListHeaderLayout = style({
 
 export const projectListHeaderContent = style({
   display: "flex",
-  justifyContent: "space-between",
   alignItems: "center",
   width: "100%",
   maxWidth: vars.token.width.large,
+  gap: vars.size[4],
 });
 
 export const projectListHeaderInformation = style({
@@ -52,4 +52,8 @@ export const projectListHeaderDescription = style({
 
 export const projectListHeaderAddProjectButton = style({
   gap: vars.size[1],
+});
+
+export const projectListHeaderEmpty = style({
+  flex: 1,
 });

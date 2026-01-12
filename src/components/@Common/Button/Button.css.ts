@@ -13,6 +13,9 @@ export const buttonStyle = styleVariants({
     {
       color: vars.color.accentForeground,
       backgroundColor: vars.color.accent,
+      ":hover": {
+        opacity: 0.9,
+      },
     },
   ],
 });

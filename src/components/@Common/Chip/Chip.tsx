@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "react";
 import * as styles from "./Chip.css";
 
 interface ChipProps extends HTMLAttributes<HTMLSpanElement> {
-  type: "gray";
+  type: "unreal";
 }
 
 export function Chip({ type, children, className, ...props }: ChipProps) {

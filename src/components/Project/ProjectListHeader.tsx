@@ -1,6 +1,6 @@
 import { Button } from "@/components/@Common";
 import * as styles from "./ProjectListHeader.css";
-import { Anvil, Plus } from "lucide-react";
+import { Anvil, Download, Plus } from "lucide-react";
 
 export function ProjectListHeader() {
   return (
@@ -17,6 +17,7 @@ export function ProjectListHeader() {
             </p>
           </div>
         </div>
+        <div className={styles.projectListHeaderEmpty} />
         <Button
           variant="primary"
           size="m"
@@ -24,6 +25,14 @@ export function ProjectListHeader() {
         >
           <Plus />
           Add Project
+        </Button>
+        <Button
+          variant="primary"
+          size="m"
+          className={styles.projectListHeaderAddProjectButton}
+        >
+          <Download />
+          Load Project
         </Button>
       </div>
     </div>
