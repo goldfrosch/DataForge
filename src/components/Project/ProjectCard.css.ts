@@ -12,6 +12,7 @@ export const projectCardLayout = style({
 
   ":hover": {
     color: vars.color.accent,
+    borderColor: vars.color.accent,
   },
 
   ":disabled": {
