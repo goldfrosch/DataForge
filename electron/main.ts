@@ -21,7 +21,8 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1440,
     height: 960,
-    icon: path.join(iconPath, "vite.svg"),
+    backgroundColor: "#1a1a1a",
+    titleBarStyle: "hidden",
     webPreferences: {
       preload,
       nodeIntegration: false,
@@ -56,10 +57,10 @@ app.on("activate", () => {
 });
 
 app.whenReady().then(() => {
-  ipcMain.handle("ping", () => {
+  ipcMain.handle("electron:ping", () => {
     console.log("pong!");
   });
-  ipcMain.handle("loadAllProjects", async () => {
+  ipcMain.handle("electron:loadAllProjects", async () => {
     const result: ConfigType = JSON.parse(
       await readFile(path.join(__dirname, "config.json"), "utf-8")
     );
@@ -70,6 +71,12 @@ app.whenReady().then(() => {
 
     return result;
   });
+
+  ipcMain.handle("win:minimize", () => win?.minimize());
+  ipcMain.handle("win:toggleMaximize", () => {
+    win?.isMaximized() ? win?.unmaximize() : win?.maximize();
+  });
+  ipcMain.handle("win:close", () => win?.close());
 
   createWindow();
 });

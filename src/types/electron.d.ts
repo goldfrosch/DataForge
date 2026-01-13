@@ -5,10 +5,16 @@ export interface IElectronAPI {
     ping(): void;
     loadAllProjects(): { projects: IProject[] };
   };
+  windowEvent: {
+    minimize(): void;
+    toggleMaximize(): void;
+    close(): void;
+  };
 }
 
 declare global {
   interface Window {
     electronEvent: IElectronAPI["electronEvent"];
+    windowEvent: IElectronAPI["windowEvent"];
   }
 }
