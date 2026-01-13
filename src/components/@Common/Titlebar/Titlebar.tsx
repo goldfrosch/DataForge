@@ -1,8 +1,13 @@
 import classNames from "classnames";
 import * as styles from "./Titlebar.css";
-import { X } from "lucide-react";
+import { LucideUnderline, X } from "lucide-react";
 
 export function TitleBar() {
+  const handleClickMinimalize = () => {
+    console.log("hi");
+    window.windowEvent.minimize();
+  };
+
   const handleClickExit = () => {
     console.log("hi");
     window.windowEvent.close();
@@ -11,12 +16,20 @@ export function TitleBar() {
   return (
     <div className={classNames(styles.titlebarLayout, "titlebar")}>
       <div>right</div>
-      <button
-        className={classNames(styles.titlebarIconLayout, "no-drag")}
-        onClick={handleClickExit}
-      >
-        <X className={styles.titlebarIcon} />
-      </button>
+      <div className={styles.titlebarContentLayout}>
+        <button
+          className={classNames(styles.titlebarIconLayout, "no-drag")}
+          onClick={handleClickMinimalize}
+        >
+          <LucideUnderline className={styles.titlebarIcon} />
+        </button>
+        <button
+          className={classNames(styles.titlebarIconLayout, "no-drag")}
+          onClick={handleClickExit}
+        >
+          <X className={styles.titlebarIcon} />
+        </button>
+      </div>
     </div>
   );
 }
