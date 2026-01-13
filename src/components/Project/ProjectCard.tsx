@@ -3,6 +3,8 @@ import * as styles from "./ProjectCard.css";
 import { Chip } from "../@Common";
 import classNames from "classnames";
 import type { IProject } from "@/types/Project.type";
+import { useNavigate } from "react-router";
+import type { MouseEventHandler } from "react";
 
 const ProjectType = {
   unreal: {
@@ -16,6 +18,13 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const navigate = useNavigate();
+
+  const handleClickProjectCard: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    navigate(`/database/${project.uuid}`);
+  };
+
   const getTablesText = () => {
     const tableCount = project.tables.length;
 
@@ -35,6 +44,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className={
         styles.projectCardLayout[project.isConnect ? "enable" : "disable"]
       }
+      onClick={handleClickProjectCard}
       disabled={!project.isConnect}
     >
       <div className={styles.projectCardHeader}>
