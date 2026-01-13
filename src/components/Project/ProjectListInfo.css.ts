@@ -2,7 +2,11 @@ import { vars } from "@/styles/Token.css";
 import { style } from "@vanilla-extract/css";
 
 export const projectListInfoLayout = style({
-  backgroundColor: `rgba(${vars.color.card}, 0.5)`,
+  backgroundColor: `color-mix(
+    in srgb,
+    ${vars.color.card} 50%,
+    transparent
+  )`,
   borderBottom: `${vars.color.border} 1px solid`,
   padding: `${vars.size[4]} ${vars.size[6]}`,
 
