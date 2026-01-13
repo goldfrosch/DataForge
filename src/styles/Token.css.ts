@@ -39,10 +39,21 @@ export const vars = createGlobalTheme(":root", {
     width: {
       large: "1440px",
     },
+    text: {
+      truncate: {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      },
+    },
   },
   font: {
     sm: {
       fontSize: "0.875rem",
+      lineHeight: "calc(1.25 / 0.875)",
+    },
+    m: {
+      fontSize: "1rem",
       lineHeight: "calc(1.25 / 0.875)",
     },
     xs: {
@@ -55,6 +66,7 @@ export const vars = createGlobalTheme(":root", {
     },
   },
   size: {
+    wider: "0.05em",
     radius: "0.5rem",
     "0.5": "0.125rem",
     1: "0.25rem",
@@ -68,6 +80,7 @@ export const vars = createGlobalTheme(":root", {
     6: "1.5rem",
     7: "1.75rem",
     8: "2rem",
+    64: "16rem",
   },
   transition: {
     defaultTiming: "cubic-bezier(0.4, 0, 0.2, 1)",

@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 
 // TODO: 해야할 개발 내용
@@ -11,8 +12,12 @@ import App from "./App";
 // 6. 프로젝트 사용 시 unreal, unity 프로젝트 설정하기 (우선은 언리얼만)
 // 7. 테이블 column에서 특정 타입의 class or blueprint 주입 기능
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </StrictMode>
 );

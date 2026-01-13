@@ -18,6 +18,21 @@ export const buttonStyle = styleVariants({
       },
     },
   ],
+  none: [
+    buttonBaseStyle,
+    {
+      color: vars.color.mutedForeground,
+      background: "none",
+      ":hover": {
+        color: vars.color.sidebarForeground,
+        backgroundColor: `color-mix(
+          in srgb,
+          ${vars.color.sidebarAccent} 50%,
+          transparent
+        )`,
+      },
+    },
+  ],
 });
 
 export const buttonSize = styleVariants({

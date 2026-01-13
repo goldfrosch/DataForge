@@ -3,7 +3,7 @@ import * as styles from "./Button.css";
 import classNames from "classnames";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: "primary";
+  variant: "primary" | "none";
   size: "m";
 }
 

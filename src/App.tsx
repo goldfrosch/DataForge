@@ -1,24 +1,31 @@
+import { useEffect } from "react";
 import { MainPage } from "./pages/MainPage";
 import { DefaultLayout } from "./layouts/DefaultLayout";
-import "./App.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DatabasePage } from "./pages/DatabasePage";
+import { useProjectStore } from "./hooks/UseStore.hook";
+import { useLoadAllProjectsHook } from "./hooks/UseElectronEvent.hook";
 
-const queryClient = new QueryClient();
+import "./App.css";
 
 function App() {
+  const { initialProject } = useProjectStore();
+
+  const { data, isSuccess } = useLoadAllProjectsHook();
+
+  useEffect(() => {
+    initialProject(data?.projects ?? []);
+  }, [isSuccess]);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <DefaultLayout>
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<MainPage />} />
-            <Route path="/database/:uuid" element={<DatabasePage />} />
-          </Routes>
-        </BrowserRouter>
-      </DefaultLayout>
-    </QueryClientProvider>
+    <DefaultLayout>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<MainPage />} />
+          <Route path="/database/:uuid" element={<DatabasePage />} />
+        </Routes>
+      </BrowserRouter>
+    </DefaultLayout>
   );
 }
 

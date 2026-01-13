@@ -1,9 +1,9 @@
 import { ProjectList } from "@/components/Project/ProjectList";
 import { ProjectListInfo } from "@/components/Project/ProjectListInfo";
 import { ProjectListHeader } from "@/components/Project/ProjectListHeader";
+import { useLoadAllProjectsHook } from "@/hooks/UseElectronEvent.hook";
 
 import * as styles from "./MainPage.css";
-import { useLoadAllProjectsHook } from "@/hooks/electronEvent.hook";
 
 export function MainPage() {
   const { data } = useLoadAllProjectsHook();
