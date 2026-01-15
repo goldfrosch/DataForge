@@ -29,5 +29,19 @@ export const titlebarIconLayout = style({
 export const titlebarIcon = style({
   width: vars.size[5],
   height: vars.size[5],
+});
+
+export const titlebarIconHovered = style({
   color: vars.color.mutedForeground,
+  ":hover": {
+    backgroundColor: vars.color.mutedForeground,
+    color: vars.color.muted,
+  },
+});
+
+export const titlebarExitIconHovered = style({
+  color: vars.color.mutedForeground,
+  ":hover": {
+    backgroundColor: vars.color.destructive,
+  },
 });
