@@ -1,14 +1,16 @@
 import type { PropsWithChildren } from "react";
 import * as styles from "./DefaultLayout.css";
-import { TitleBar } from "@/components/@Common";
+import { Titlebar } from "@/components/@Common";
 
 interface DefaultLayoutProps extends PropsWithChildren {}
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <div className={styles.DefaultLayout}>
-      <TitleBar />
-      {children}
+    <div className={styles.defaultLayout}>
+      <Titlebar title={"DataForge"} />
+      <div className={styles.defaultBody}>
+        {children}
+      </div>
     </div>
   );
 }

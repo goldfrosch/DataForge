@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, ipcRenderer } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { readFile } from "fs/promises";
@@ -14,7 +14,6 @@ process.env.VITE_PUBLIC = app.isPackaged
 let win: BrowserWindow | null = null;
 const preload = path.join(__dirname, "preload.cjs");
 const url = process.env.VITE_DEV_SERVER_URL;
-const iconPath = process.env.VITE_PUBLIC ?? "";
 const distPath = process.env.DIST ?? "";
 
 function createWindow() {

@@ -10,6 +10,30 @@ export const titlebarLayout = style({
   justifyContent: "space-between",
 });
 
+export const titlebarRightLayout = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
+})
+
+export const titlebarThumbnailLayout = style({
+  backgroundColor: vars.color.accent,
+  borderRadius: vars.size[1],
+  padding: vars.size[3],
+
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
+})
+
+export const titlebarCenterLayout = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: "center",
+
+  color: vars.color.mutedForeground,
+})
+
 export const titlebarContentLayout = style({
   display: "flex",
   alignItems: "center",

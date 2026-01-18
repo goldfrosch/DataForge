@@ -1,5 +1,5 @@
 import { Button } from "./Button/Button";
 import { Chip } from "./Chip/Chip";
-import { TitleBar } from "./Titlebar/Titlebar";
+import { Titlebar } from "./Titlebar/Titlebar";
 
-export { Button, Chip, TitleBar };
+export { Button, Chip, Titlebar };

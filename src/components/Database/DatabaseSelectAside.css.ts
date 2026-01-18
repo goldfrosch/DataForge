@@ -3,7 +3,7 @@ import { style } from "@vanilla-extract/css";
 
 export const databaseSelectAsideLayout = style({
   width: vars.size[64],
-  height: "100vh",
+  height: "100%",
   backgroundColor: vars.color.sidebar,
   borderRight: `1px solid ${vars.color.sidebarBorder}`,
 
