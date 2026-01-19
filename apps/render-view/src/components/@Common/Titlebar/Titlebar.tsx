@@ -1,18 +1,12 @@
 import classNames from "classnames";
 import * as styles from "./Titlebar.css";
 import { LucideMaximize, LucideUnderline, X } from "lucide-react";
-import { useEffect } from "react";
 
 interface TitlebarProps {
   title: string;
 }
 
 export function Titlebar({title}: TitlebarProps) {
-
-  const test = (isMaximized: boolean) => {
-    console.log(isMaximized);
-  }
-
   const handleClickToggleMaximize = () => {
     window.windowEvent.toggleMaximize();
   };
@@ -24,10 +18,6 @@ export function Titlebar({title}: TitlebarProps) {
   const handleClickExit = () => {
     window.windowEvent.close();
   };
-
-  useEffect(() => {
-    window.windowEvent.onToggleMaximize(test);
-  }, []);
 
   return (
     <div className={classNames(styles.titlebarLayout, "titlebar")}>

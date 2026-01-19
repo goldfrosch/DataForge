@@ -1,0 +1,11 @@
+{
+    "projects": [
+        {
+            "uuid": 195743673,
+            "type": "unreal",
+            "isConnect": true,
+            "projectName": "MagicCoder",
+            "projectPath": "D:\\Unreal\\MagicCoder"
+        }
+    ]
+}

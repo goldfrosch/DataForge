@@ -1,11 +1,13 @@
-const { contextBridge, ipcRenderer, ipcMain } = require("electron");
+import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electronEvent", {
   ping: () => ipcRenderer.invoke("electron:ping"),
   loadAllProjects: () => ipcRenderer.invoke("electron:loadAllProjects"),
 });
 
-ipcMain;
+contextBridge.exposeInMainWorld("dataForgeEvent", {
+  ping: () => ipcRenderer.invoke("dataForge:getDataList"),
+});
 
 contextBridge.exposeInMainWorld("windowEvent", {
   minimize: () => ipcRenderer.invoke("win:minimize"),

@@ -1,0 +1,22 @@
+{
+  "name": "electron",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "cross-env MODE=build tsup",
+    "start": "cross-env MODE=build electron ../../dist/main.js",
+    "dev": "concurrently \"tsup --watch\" \"electronmon dist/main.js\""
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^37.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "concurrently": "^9.2.0",
+    "electronmon": "^2.0.3",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.5.0"
+  }
+}
