@@ -4,7 +4,14 @@ type ProjectType = {
   isConnect: boolean;
   projectName: string;
   projectPath: string;
-  tables: unknown[];
+  tableCount: number;
+};
+
+type DatabaseType = {
+  uuid: number;
+  type: "csv";
+  dataName: string;
+  row: number;
 };
 
 export type ConfigType = {

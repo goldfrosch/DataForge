@@ -26,7 +26,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   };
 
   const getTablesText = () => {
-    const tableCount = project.tables.length;
+    const tableCount = project.tableCount;
 
     if (tableCount <= 0) {
       return "No table";

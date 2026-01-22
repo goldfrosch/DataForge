@@ -61,18 +61,17 @@ app.whenReady().then(() => {
   ipcMain.handle("electron:ping", () => {
     console.log("pong!");
   });
+
   ipcMain.handle("electron:loadAllProjects", async () => {
     const result: ConfigType = JSON.parse(
       await readFile(path.join(__dirname, "config.json"), "utf-8")
     );
 
-    result.projects.flatMap((value) => {
-      value.tables = [2, 54, 3, 4, 56];
-    });
-
     return result;
   });
+
   ipcMain.handle("win:minimize", () => win?.minimize());
+
   ipcMain.handle("win:toggleMaximize", () => {
     if (win?.isMaximized()) {
       win.unmaximize();
@@ -82,9 +81,12 @@ app.whenReady().then(() => {
     // 최대화 상태 변경 후 현재 상태를 반환
     return win?.isMaximized() ?? false;
   });
+
   ipcMain.handle("win:isMaximized", () => {
     return win?.isMaximized() ?? false;
   });
+
   ipcMain.handle("win:close", () => win?.close());
+  
   createWindow();
 });

@@ -4,5 +4,5 @@ export interface IProject {
   isConnect: boolean;
   projectName: string;
   projectPath: string;
-  tables: any[];
+  tableCount: number;
 }

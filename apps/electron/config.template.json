@@ -5,7 +5,8 @@
             "type": "unreal",
             "isConnect": true,
             "projectName": "MagicCoder",
-            "projectPath": "D:\\Unreal\\MagicCoder"
+            "projectPath": "D:\\Unreal\\MagicCoder",
+            "tableCount": 5
         }
     ]
 }

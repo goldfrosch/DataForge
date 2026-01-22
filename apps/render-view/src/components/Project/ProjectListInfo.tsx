@@ -11,7 +11,7 @@ export function ProjectListInfo({ list }: PropectListInfoProps) {
   const totalProjectsCount = list.length;
   const totalConnected = list.filter((item) => item.isConnect).length;
   const totalTables = list.reduce((prev, cur) => {
-    return prev + cur.tables.length;
+    return prev + cur.tableCount;
   }, 0);
 
   return (
