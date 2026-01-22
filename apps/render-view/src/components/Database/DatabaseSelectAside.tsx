@@ -1,4 +1,4 @@
-import { ArrowLeft, Database, Settings, Table2 } from "lucide-react";
+import { ArrowLeft, Database, Plus, Settings, Table2 } from "lucide-react";
 import { Button } from "../@Common";
 import * as styles from "./DatabaseSelectAside.css";
 import { useNavigate } from "react-router";
@@ -48,7 +48,16 @@ export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
         </div>
       </div>
       <div className={styles.databaseSelectAsideTableList}>
-        <span className={styles.databaseSelectAsideTableTitle}>TABLES</span>
+        <div className={styles.databaseSelectAsideTableListHeader}>
+          <span className={styles.databaseSelectAsideTableTitle}>TABLES</span>
+          <Button
+            variant="none"
+            size="s"
+          >
+            <Plus className={styles.databaseSelectAsideTableListHeaderAddIcon} />
+          </Button>
+        </div>
+        {/* 리스트 */}
         <nav>
           <Button
             variant="none"

@@ -77,11 +77,22 @@ export const databaseSelectAsideTableList = style({
   padding: vars.size[3],
 });
 
+export const databaseSelectAsideTableListHeader = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  marginBottom: vars.size[2],
+});
+
+export const databaseSelectAsideTableListHeaderAddIcon = style({
+  width: vars.size[4],
+  height: vars.size[4],
+});
+
 export const databaseSelectAsideTableTitle = style({
   color: vars.color.mutedForeground,
   ...vars.font.xs,
   letterSpacing: vars.size.wider,
-  marginBottom: vars.size[2],
 });
 
 export const databaseSelectAsideTableCard = style({

@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "primary" | "none";
-  size: "m";
+  size: "s" |"m";
 }
 
 export function Button({

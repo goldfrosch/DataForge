@@ -36,6 +36,11 @@ export const buttonStyle = styleVariants({
 });
 
 export const buttonSize = styleVariants({
+  s: {
+    padding: `${vars.size[1]}`,
+    borderRadius: vars.size[1],
+    ...vars.font.sm,
+  },
   m: {
     padding: `${vars.size["2.5"]} ${vars.size[4]}`,
     borderRadius: vars.size.radius,
