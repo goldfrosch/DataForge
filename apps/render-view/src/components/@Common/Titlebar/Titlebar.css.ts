@@ -2,7 +2,6 @@ import { vars } from "@/styles/Token.css";
 import { style } from "@vanilla-extract/css";
 
 export const titlebarLayout = style({
-  padding: `${vars.size[1]} ${vars.size[2]}`,
   backgroundColor: vars.color.background,
 
   display: "flex",
@@ -47,7 +46,7 @@ export const titlebarIconLayout = style({
 
   background: "none",
 
-  padding: `0 ${vars.size[1.5]}`,
+  padding: `${vars.size[1]} ${vars.size[2]}`,
 });
 
 export const titlebarIcon = style({

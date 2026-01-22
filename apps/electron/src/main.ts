@@ -34,6 +34,14 @@ function createWindow() {
   } else {
     win.loadFile(path.join(__dirname, "render-view/index.html"));
   }
+
+  // 최대화 상태 변경 이벤트 리스너
+  win.on("maximize", () => {
+    win?.webContents.send("win:maximize-changed", true);
+  });
+  win.on("unmaximize", () => {
+    win?.webContents.send("win:maximize-changed", false);
+  });
 }
 
 app.on("window-all-closed", () => {
@@ -66,7 +74,16 @@ app.whenReady().then(() => {
   });
   ipcMain.handle("win:minimize", () => win?.minimize());
   ipcMain.handle("win:toggleMaximize", () => {
-    win?.isMaximized() ? win?.unmaximize() : win?.maximize();
+    if (win?.isMaximized()) {
+      win.unmaximize();
+    } else {
+      win?.maximize();
+    }
+    // 최대화 상태 변경 후 현재 상태를 반환
+    return win?.isMaximized() ?? false;
+  });
+  ipcMain.handle("win:isMaximized", () => {
+    return win?.isMaximized() ?? false;
   });
   ipcMain.handle("win:close", () => win?.close());
   createWindow();

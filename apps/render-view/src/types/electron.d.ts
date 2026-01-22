@@ -7,8 +7,9 @@ export interface IElectronAPI {
   };
   windowEvent: {
     minimize(): void;
-    onToggleMaximize(callback: (isMaximized: boolean) => void): void;
-    toggleMaximize(): void;
+    toggleMaximize(): Promise<boolean>;
+    isMaximized(): Promise<boolean>;
+    onMaximizeChanged(callback: (isMaximized: boolean) => void): void;
     close(): void;
   };
 }

@@ -11,12 +11,16 @@ contextBridge.exposeInMainWorld("dataForgeEvent", {
 
 contextBridge.exposeInMainWorld("windowEvent", {
   minimize: () => ipcRenderer.invoke("win:minimize"),
-  onToggleMaximize: (callback: (isMaximized: boolean) => void) => 
-    ipcRenderer.on("win:toggleMaximize", (_: any, value: any) => {
-      callback(value);
-    }),
-  toggleMaximize: () => {
-    ipcRenderer.send("win:toggleMaximize");
+  toggleMaximize: async () => {
+    return await ipcRenderer.invoke("win:toggleMaximize");
+  },
+  isMaximized: async () => {
+    return await ipcRenderer.invoke("win:isMaximized");
+  },
+  onMaximizeChanged: (callback: (isMaximized: boolean) => void) => {
+    ipcRenderer.on("win:maximize-changed", (_: any, isMaximized: boolean) => {
+      callback(isMaximized);
+    });
   },
   close: () => ipcRenderer.invoke("win:close"),
 });

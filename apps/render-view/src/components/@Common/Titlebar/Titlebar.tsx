@@ -1,14 +1,28 @@
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 import * as styles from "./Titlebar.css";
-import { LucideMaximize, LucideUnderline, X } from "lucide-react";
+import { LucideMinimize2, LucideMaximize2, X, LucideMinus } from "lucide-react";
 
 interface TitlebarProps {
   title: string;
 }
 
 export function Titlebar({title}: TitlebarProps) {
-  const handleClickToggleMaximize = () => {
-    window.windowEvent.toggleMaximize();
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  useEffect(() => {
+    // 초기 최대화 상태 가져오기
+    window.windowEvent.isMaximized().then(setIsMaximized);
+
+    // 최대화 상태 변경 이벤트 리스너 등록
+    window.windowEvent.onMaximizeChanged((maximized) => {
+      setIsMaximized(maximized);
+    });
+  }, []);
+
+  const handleClickToggleMaximize = async () => {
+    const maximized = await window.windowEvent.toggleMaximize();
+    setIsMaximized(maximized);
   };
 
   const handleClickMinimalize = () => {
@@ -34,7 +48,7 @@ export function Titlebar({title}: TitlebarProps) {
           )}
           onClick={handleClickMinimalize}
         >
-          <LucideUnderline className={styles.titlebarIcon} />
+          <LucideMinus className={styles.titlebarIcon} />
         </button>
         <button
           className={classNames(
@@ -44,7 +58,11 @@ export function Titlebar({title}: TitlebarProps) {
           )}
           onClick={handleClickToggleMaximize}
         >
-          <LucideMaximize className={styles.titlebarIcon} />
+          {
+            isMaximized ?
+            <LucideMinimize2 className={styles.titlebarIcon} /> 
+            : <LucideMaximize2 className={styles.titlebarIcon} />
+            }
         </button>
         <button
           className={classNames(
