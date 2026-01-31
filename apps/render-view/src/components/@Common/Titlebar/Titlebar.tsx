@@ -7,7 +7,7 @@ interface TitlebarProps {
   title: string;
 }
 
-export function Titlebar({title}: TitlebarProps) {
+export function Titlebar({ title }: TitlebarProps) {
   const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
@@ -58,11 +58,11 @@ export function Titlebar({title}: TitlebarProps) {
           )}
           onClick={handleClickToggleMaximize}
         >
-          {
-            isMaximized ?
-            <LucideMinimize2 className={styles.titlebarIcon} /> 
-            : <LucideMaximize2 className={styles.titlebarIcon} />
-            }
+          {isMaximized ? (
+            <LucideMinimize2 className={styles.titlebarIcon} />
+          ) : (
+            <LucideMaximize2 className={styles.titlebarIcon} />
+          )}
         </button>
         <button
           className={classNames(

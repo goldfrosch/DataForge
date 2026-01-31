@@ -8,7 +8,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <div className={styles.defaultLayout}>
       <Titlebar title={"DataForge"} />
-      <div className={styles.defaultBody}>
+      <div id="default-body" className={styles.defaultBody}>
         {children}
       </div>
     </div>

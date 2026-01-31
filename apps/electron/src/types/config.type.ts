@@ -1,17 +1,19 @@
 type ProjectType = {
   uuid: number;
-  type: "unreal";
+  type: "unreal" | "unity";
   isConnect: boolean;
   projectName: string;
   projectPath: string;
   tableCount: number;
 };
 
-type DatabaseType = {
-  uuid: number;
-  type: "csv";
-  dataName: string;
-  row: number;
+export type TableType = {
+  name: string;
+  createdAt: string;
+};
+
+export type DatabaseJsonType = {
+  tables: TableType[];
 };
 
 export type ConfigType = {

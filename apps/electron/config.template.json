@@ -1,12 +1,20 @@
 {
-    "projects": [
-        {
-            "uuid": 195743673,
-            "type": "unreal",
-            "isConnect": true,
-            "projectName": "MagicCoder",
-            "projectPath": "D:\\Unreal\\MagicCoder",
-            "tableCount": 5
-        }
-    ]
+  "projects": [
+    {
+      "uuid": 0,
+      "type": "unreal",
+      "isConnect": true,
+      "projectName": "MagicCoder",
+      "projectPath": "D:\\Unreal\\MagicCoder",
+      "tableCount": 5
+    },
+    {
+      "uuid": 1,
+      "type": "unity",
+      "isConnect": true,
+      "projectName": "Wanderer's Cafe",
+      "projectPath": "D:\\Unity\\ISGIdle",
+      "tableCount": 0
+    }
+  ]
 }

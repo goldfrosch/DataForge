@@ -3,6 +3,10 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("electronEvent", {
   ping: () => ipcRenderer.invoke("electron:ping"),
   loadAllProjects: () => ipcRenderer.invoke("electron:loadAllProjects"),
+  createTable: (projectPath: string, tableName: string) =>
+    ipcRenderer.invoke("electron:createTable", projectPath, tableName),
+  getTables: (projectPath: string) =>
+    ipcRenderer.invoke("electron:getTables", projectPath),
 });
 
 contextBridge.exposeInMainWorld("dataForgeEvent", {

@@ -64,10 +64,15 @@ export const vars = createGlobalTheme(":root", {
       fontSize: "1.5rem",
       lineHeight: "calc(2 / 1.5)",
     },
+    lg: {
+      fontSize: "1.125rem",
+      lineHeight: "calc(1.75 / 1.125)",
+    },
   },
   size: {
     wider: "0.05em",
     radius: "0.5rem",
+    containerMd: "28rem",
     "0.5": "0.125rem",
     1: "0.25rem",
     "1.5": "0.375rem",

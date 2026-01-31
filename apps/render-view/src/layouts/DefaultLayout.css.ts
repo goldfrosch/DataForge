@@ -12,4 +12,5 @@ export const defaultLayout = style({
 
 export const defaultBody = style({
   flex: 1,
-})
+  position: "relative",
+});

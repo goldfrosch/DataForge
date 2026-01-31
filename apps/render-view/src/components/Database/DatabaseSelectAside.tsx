@@ -3,7 +3,8 @@ import { Button } from "../@Common";
 import * as styles from "./DatabaseSelectAside.css";
 import { useNavigate } from "react-router";
 import type { MouseEventHandler } from "react";
-import { useProjectStore } from "@/hooks/UseStore.hook";
+import { POPUP_STATE, useProjectStore } from "@/hooks/UseStore.hook";
+import { usePopup } from "@/hooks/UsePopup.hook";
 
 interface DatabaseSelectAsideProps {
   uuid: number;
@@ -12,10 +13,16 @@ interface DatabaseSelectAsideProps {
 export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
   const { projectObject } = useProjectStore();
   const navigate = useNavigate();
+  const { push } = usePopup();
 
   const handleClickGoBack: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     navigate(-1);
+  };
+
+  const handleClickAddTable: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    push(POPUP_STATE.DATABASE_ADD_TABLE_POPUP);
   };
 
   const databaseTitle = projectObject[uuid]?.projectName ?? "Unknown Project";
@@ -50,11 +57,10 @@ export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
       <div className={styles.databaseSelectAsideTableList}>
         <div className={styles.databaseSelectAsideTableListHeader}>
           <span className={styles.databaseSelectAsideTableTitle}>TABLES</span>
-          <Button
-            variant="none"
-            size="s"
-          >
-            <Plus className={styles.databaseSelectAsideTableListHeaderAddIcon} />
+          <Button variant="none" size="s" onClick={handleClickAddTable}>
+            <Plus
+              className={styles.databaseSelectAsideTableListHeaderAddIcon}
+            />
           </Button>
         </div>
         {/* 리스트 */}

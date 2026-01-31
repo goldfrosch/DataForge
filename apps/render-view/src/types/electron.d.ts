@@ -1,9 +1,16 @@
 import type { IProject } from "./Project.type";
 
+export interface ITable {
+  name: string;
+  createdAt: string;
+}
+
 export interface IElectronAPI {
   electronEvent: {
     ping(): void;
     loadAllProjects(): { projects: IProject[] };
+    createTable(projectPath: string, tableName: string): Promise<ITable[]>;
+    getTables(projectPath: string): Promise<ITable[]>;
   };
   windowEvent: {
     minimize(): void;

@@ -11,6 +11,10 @@ const ProjectType = {
     type: "unreal",
     content: "Unreal Engine",
   },
+  unity: {
+    type: "unity",
+    content: "Unity",
+  },
 } as const;
 
 interface ProjectCardProps {

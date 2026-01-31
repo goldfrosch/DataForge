@@ -14,4 +14,11 @@ export const chipStyle = styleVariants({
       color: "#37435d",
     },
   ],
+  unity: [
+    baseChipStyle,
+    {
+      backgroundColor: "#5f697d",
+      color: "#37435d",
+    },
+  ],
 });
