@@ -33,7 +33,7 @@ export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
   };
 
   const handleSelectTable = (tableName: string) => {
-    setSearchParams({ table: tableName });
+    setSearchParams({ table: tableName }, { replace: true });
   };
 
   const databaseTitle = projectObject[uuid]?.projectName ?? "Unknown Project";

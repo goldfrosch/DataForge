@@ -34,16 +34,6 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
   const [columns, setColumns] = useState<IColumn[]>([]);
   const [rows, setRows] = useState<TableDataRow[]>([]);
 
-  useEffect(() => {
-    if (tableData) {
-      setColumns(tableData.columns);
-      setRows(tableData.rows);
-    } else if (!isLoading) {
-      setColumns([]);
-      setRows([]);
-    }
-  }, [tableData, isLoading]);
-
   const handleAddColumn = () => {
     const name = `Column${columns.length + 1}`;
     const newCol: IColumn = {
@@ -112,6 +102,16 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
       data: { columns, rows },
     });
   };
+
+  useEffect(() => {
+    if (tableData) {
+      setColumns(tableData.columns);
+      setRows(tableData.rows);
+    } else if (!isLoading) {
+      setColumns([]);
+      setRows([]);
+    }
+  }, [tableData, isLoading]);
 
   if (isLoading) {
     return (
