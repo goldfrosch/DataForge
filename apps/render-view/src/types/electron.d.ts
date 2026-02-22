@@ -5,12 +5,20 @@ export interface ITable {
   createdAt: string;
 }
 
+import type { ITableData } from "./TableData.type";
+
 export interface IElectronAPI {
   electronEvent: {
     ping(): void;
     loadAllProjects(): { projects: IProject[] };
     createTable(projectPath: string, tableName: string): Promise<ITable[]>;
     getTables(projectPath: string): Promise<ITable[]>;
+    getTableData(projectPath: string, tableName: string): Promise<ITableData | null>;
+    saveTableData(
+      projectPath: string,
+      tableName: string,
+      payload: ITableData,
+    ): Promise<void>;
   };
   windowEvent: {
     minimize(): void;

@@ -103,11 +103,28 @@ export const databaseSelectAsideTableCard = style({
   gap: vars.size[3],
   color: vars.color.mutedForeground,
   background: "none",
-  padding: `${(vars.size[2.5], vars.size[3])}`,
+  padding: `${vars.size[2.5]} ${vars.size[3]}`,
+});
+
+export const databaseSelectAsideTableCardActive = style({
+  color: vars.color.sidebarForeground,
+  backgroundColor: vars.color.sidebarAccent,
+  borderRadius: vars.size.radius,
+});
+
+export const databaseSelectAsideTableCardName = style({
+  ...vars.token.text.truncate,
+  maxWidth: "10rem",
 });
 
 export const databaseSelectAsideTableEmpty = style({
   flex: 1,
+});
+
+export const databaseSelectAsideTableEmptyHint = style({
+  color: vars.color.mutedForeground,
+  ...vars.font.xs,
+  padding: vars.size[2],
 });
 
 export const databaseSelectAsideTableRowCount = style({
@@ -127,7 +144,7 @@ export const databaseSelectAsideSettingsButton = style({
   gap: vars.size[3],
   color: vars.color.mutedForeground,
   background: "none",
-  padding: `${(vars.size[2.5], vars.size[3])}`,
+  padding: `${vars.size[2.5]} ${vars.size[3]}`,
 });
 
 export const databaseSelectAsideSettingsIcon = style({

@@ -4,6 +4,7 @@ import { Button } from "@/components/@Common/Button/Button";
 import * as styles from "./TableDialog.css";
 import { usePopup } from "@/hooks/UsePopup.hook";
 import { POPUP_STATE } from "@/hooks/UseStore.hook";
+import { useInvalidateTablesHook } from "@/hooks/UseElectronEvent.hook";
 
 interface TableDialogProps {
   projectPath: string;
@@ -13,6 +14,7 @@ export function TableDialog({ projectPath }: TableDialogProps) {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { currentPopup, pop } = usePopup();
+  const { invalidateTables } = useInvalidateTablesHook(projectPath);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,11 +22,12 @@ export function TableDialog({ projectPath }: TableDialogProps) {
       setIsLoading(true);
       try {
         await window.electronEvent.createTable(projectPath, name.trim());
+        invalidateTables();
         setName("");
         pop();
       } catch (error) {
         console.error("Failed to create table:", error);
-        alert("테이블 생성에 실패했습니다.");
+        // alert("테이블 생성에 실패했습니다.");
       } finally {
         setIsLoading(false);
       }

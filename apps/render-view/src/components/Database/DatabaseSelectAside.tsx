@@ -1,10 +1,12 @@
 import { ArrowLeft, Database, Plus, Settings, Table2 } from "lucide-react";
 import { Button } from "../@Common";
 import * as styles from "./DatabaseSelectAside.css";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import type { MouseEventHandler } from "react";
 import { POPUP_STATE, useProjectStore } from "@/hooks/UseStore.hook";
 import { usePopup } from "@/hooks/UsePopup.hook";
+import { useGetTablesHook } from "@/hooks/UseElectronEvent.hook";
+import classNames from "classnames";
 
 interface DatabaseSelectAsideProps {
   uuid: number;
@@ -13,7 +15,12 @@ interface DatabaseSelectAsideProps {
 export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
   const { projectObject } = useProjectStore();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { push } = usePopup();
+
+  const databasePath = projectObject[uuid]?.projectPath ?? "";
+  const { data: tables = [] } = useGetTablesHook(databasePath);
+  const selectedTableName = searchParams.get("table");
 
   const handleClickGoBack: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -25,8 +32,11 @@ export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
     push(POPUP_STATE.DATABASE_ADD_TABLE_POPUP);
   };
 
+  const handleSelectTable = (tableName: string) => {
+    setSearchParams({ table: tableName });
+  };
+
   const databaseTitle = projectObject[uuid]?.projectName ?? "Unknown Project";
-  const databasePath = projectObject[uuid]?.projectPath ?? "unknown_path";
 
   return (
     <aside className={styles.databaseSelectAsideLayout}>
@@ -63,18 +73,32 @@ export function DatabaseSelectAside({ uuid }: DatabaseSelectAsideProps) {
             />
           </Button>
         </div>
-        {/* 리스트 */}
         <nav>
-          <Button
-            variant="none"
-            size="m"
-            className={styles.databaseSelectAsideTableCard}
-          >
-            <Table2 className={styles.databaseSelectAsideSettingsIcon} />
-            <span>table_name</span>
-            <span className={styles.databaseSelectAsideTableEmpty} />
-            <span className={styles.databaseSelectAsideTableRowCount}>150</span>
-          </Button>
+          {tables.length === 0 ? (
+            <p className={styles.databaseSelectAsideTableEmptyHint}>
+              No tables yet. Add one with +
+            </p>
+          ) : (
+            tables.map((table) => (
+              <Button
+                key={table.name}
+                variant="none"
+                size="m"
+                className={classNames(
+                  styles.databaseSelectAsideTableCard,
+                  selectedTableName === table.name &&
+                    styles.databaseSelectAsideTableCardActive,
+                )}
+                onClick={() => handleSelectTable(table.name)}
+              >
+                <Table2 className={styles.databaseSelectAsideSettingsIcon} />
+                <span className={styles.databaseSelectAsideTableCardName}>
+                  {table.name}
+                </span>
+                <span className={styles.databaseSelectAsideTableEmpty} />
+              </Button>
+            ))
+          )}
         </nav>
       </div>
       <div className={styles.databaseSelectAsideSettings}>

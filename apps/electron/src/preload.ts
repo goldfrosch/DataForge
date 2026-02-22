@@ -7,6 +7,19 @@ contextBridge.exposeInMainWorld("electronEvent", {
     ipcRenderer.invoke("electron:createTable", projectPath, tableName),
   getTables: (projectPath: string) =>
     ipcRenderer.invoke("electron:getTables", projectPath),
+  getTableData: (projectPath: string, tableName: string) =>
+    ipcRenderer.invoke("electron:getTableData", projectPath, tableName),
+  saveTableData: (
+    projectPath: string,
+    tableName: string,
+    payload: { columns: { id: string; name: string; type: string }[]; rows: Record<string, string | number | boolean>[] },
+  ) =>
+    ipcRenderer.invoke(
+      "electron:saveTableData",
+      projectPath,
+      tableName,
+      payload,
+    ),
 });
 
 contextBridge.exposeInMainWorld("dataForgeEvent", {

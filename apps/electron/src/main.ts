@@ -7,6 +7,7 @@ import type {
   ConfigType,
   DatabaseJsonType,
   TableType,
+  TableDataJsonType,
 } from "./types/config.type";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -122,10 +123,26 @@ app.whenReady().then(() => {
 
         database.tables.push(newTable);
 
-        // 파일에 저장
         await writeFile(
           databaseFilePath,
           JSON.stringify(database, null, 2),
+          "utf-8",
+        );
+
+        // 빈 테이블 데이터 파일 생성 (columns, rows)
+        const tablesDir = path.join(dataForgePath, "tables");
+        await mkdir(tablesDir, { recursive: true });
+        const tableDataPath = path.join(
+          tablesDir,
+          `${tableName.replace(/[^a-zA-Z0-9_-]/g, "_")}.json`,
+        );
+        const initialTableData: TableDataJsonType = {
+          columns: [],
+          rows: [],
+        };
+        await writeFile(
+          tableDataPath,
+          JSON.stringify(initialTableData, null, 2),
           "utf-8",
         );
 
@@ -144,7 +161,7 @@ app.whenReady().then(() => {
       try {
         const databaseFilePath = path.join(
           projectPath,
-          "dataForge",
+          ".dataForge",
           "database.json",
         );
 
@@ -160,6 +177,64 @@ app.whenReady().then(() => {
         console.error("Failed to get tables:", error);
         return [];
       }
+    },
+  );
+
+  function sanitizeTableFileName(name: string): string {
+    return name.replace(/[^a-zA-Z0-9_-]/g, "_");
+  }
+
+  // 테이블 데이터 가져오기 (컬럼 + 행)
+  ipcMain.handle(
+    "electron:getTableData",
+    async (
+      _,
+      projectPath: string,
+      tableName: string,
+    ): Promise<TableDataJsonType | null> => {
+      try {
+        const tableFilePath = path.join(
+          projectPath,
+          ".dataForge",
+          "tables",
+          `${sanitizeTableFileName(tableName)}.json`,
+        );
+
+        if (!existsSync(tableFilePath)) {
+          return null;
+        }
+
+        const data = await readFile(tableFilePath, "utf-8");
+        return JSON.parse(data) as TableDataJsonType;
+      } catch (error) {
+        console.error("Failed to get table data:", error);
+        return null;
+      }
+    },
+  );
+
+  // 테이블 데이터 저장 (컬럼 + 행)
+  ipcMain.handle(
+    "electron:saveTableData",
+    async (
+      _,
+      projectPath: string,
+      tableName: string,
+      payload: TableDataJsonType,
+    ): Promise<void> => {
+      const tablesDir = path.join(projectPath, ".dataForge", "tables");
+      if (!existsSync(tablesDir)) {
+        await mkdir(tablesDir, { recursive: true });
+      }
+      const tableFilePath = path.join(
+        tablesDir,
+        `${sanitizeTableFileName(tableName)}.json`,
+      );
+      await writeFile(
+        tableFilePath,
+        JSON.stringify(payload, null, 2),
+        "utf-8",
+      );
     },
   );
 

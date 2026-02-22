@@ -1,3 +1,4 @@
+import { vars } from "@/styles/Token.css";
 import { style } from "@vanilla-extract/css";
 
 export const DatabasePageLayout = style({
@@ -8,4 +9,14 @@ export const DatabasePageLayout = style({
 
 export const DatabasePageMainLayout = style({
   flex: 1,
+  overflow: "hidden",
+});
+
+export const DatabasePageEmpty = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100%",
+  color: vars.color.mutedForeground,
+  ...vars.font.m,
 });
