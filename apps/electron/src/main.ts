@@ -69,7 +69,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle("electron:loadAllProjects", async () => {
     const result: ConfigType = JSON.parse(
-      await readFile(path.join(__dirname, "config.json"), "utf-8")
+      await readFile(path.join(__dirname, "config.json"), "utf-8"),
     );
 
     return result;
@@ -126,7 +126,7 @@ app.whenReady().then(() => {
         await writeFile(
           databaseFilePath,
           JSON.stringify(database, null, 2),
-          "utf-8"
+          "utf-8",
         );
 
         return database.tables;
@@ -134,7 +134,7 @@ app.whenReady().then(() => {
         console.error("Failed to create table:", error);
         throw error;
       }
-    }
+    },
   );
 
   // 테이블 목록 가져오기
@@ -145,7 +145,7 @@ app.whenReady().then(() => {
         const databaseFilePath = path.join(
           projectPath,
           "dataForge",
-          "database.json"
+          "database.json",
         );
 
         if (!existsSync(databaseFilePath)) {
@@ -160,7 +160,7 @@ app.whenReady().then(() => {
         console.error("Failed to get tables:", error);
         return [];
       }
-    }
+    },
   );
 
   createWindow();
