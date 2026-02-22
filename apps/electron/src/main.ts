@@ -64,6 +64,23 @@ app.on("activate", () => {
   }
 });
 
+const DATAFORGE_DIR = ".dataForge";
+const STATUS_FILE = "status";
+/** 프로젝트 루트 내 .dataForge/status 바이너리 파일 경로. 이 파일 존재 여부로 isConnect 판단. */
+function getProjectStatusPath(projectPath: string): string {
+  return path.join(projectPath, DATAFORGE_DIR, STATUS_FILE);
+}
+
+/** 프로젝트 추가 시 .dataForge/status에 쓸 바이너리 (버전 식별용 매직 + 버전 1). */
+const STATUS_FILE_BINARY = Buffer.from([0x44, 0x46, 0x30, 0x31, 0x01]);
+
+/**
+ * 프로젝트 목록이 저장되는 설정 파일 경로.
+ * - Windows: %APPDATA%\<app name>\dataforge-config.json  (예: C:\Users\<사용자>\AppData\Roaming\data-forge\dataforge-config.json)
+ * - macOS: ~/Library/Application Support/<app name>/dataforge-config.json
+ * - Linux: ~/.config/<app name>/dataforge-config.json
+ * 앱 이름은 package.json의 name(루트는 "data-forge")에 따름.
+ */
 function getConfigPath(): string {
   return path.join(app.getPath("userData"), "dataforge-config.json");
 }
@@ -73,17 +90,36 @@ app.whenReady().then(() => {
     console.log("pong!");
   });
 
+  ipcMain.handle("electron:getConfigPath", (): string => getConfigPath());
+
   ipcMain.handle("electron:loadAllProjects", async (): Promise<ConfigType> => {
     const configPath = getConfigPath();
+    const initial: ConfigType = { projects: [] };
+
     if (!existsSync(configPath)) {
-      return { projects: [] };
+      const dir = path.dirname(configPath);
+      if (!existsSync(dir)) {
+        await mkdir(dir, { recursive: true });
+      }
+      await writeFile(configPath, JSON.stringify(initial, null, 2), "utf-8");
+      if (process.env.MODE !== "build") {
+        console.log("[DataForge] config created:", configPath);
+      }
+      return initial;
     }
+    let config: ConfigType;
     try {
       const raw = await readFile(configPath, "utf-8");
-      return JSON.parse(raw) as ConfigType;
+      config = JSON.parse(raw) as ConfigType;
     } catch {
-      return { projects: [] };
+      return initial;
     }
+    // isConnect는 config 값이 아니라 프로젝트 경로 내 .dataForge/status 파일 존재 여부로 결정
+    const projects = config.projects.map((p) => ({
+      ...p,
+      isConnect: existsSync(getProjectStatusPath(p.projectPath)),
+    }));
+    return { projects };
   });
 
   ipcMain.handle(
@@ -134,17 +170,31 @@ app.whenReady().then(() => {
         projectName: project.projectName,
         projectPath: project.projectPath,
         type: project.type,
-        isConnect: project.isConnect ?? false,
+        isConnect: true,
         uuid: project.uuid ?? maxUuid + 1,
         tableCount: 0,
       };
       config.projects.push(newProject);
+
       const dir = path.dirname(configPath);
       if (!existsSync(dir)) {
         await mkdir(dir, { recursive: true });
       }
       await writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
-      return config;
+
+      const dataForgeDir = path.join(project.projectPath, DATAFORGE_DIR);
+      if (!existsSync(dataForgeDir)) {
+        await mkdir(dataForgeDir, { recursive: true });
+      }
+      const statusPath = getProjectStatusPath(project.projectPath);
+      await writeFile(statusPath, STATUS_FILE_BINARY);
+
+      return {
+        projects: config.projects.map((p) => ({
+          ...p,
+          isConnect: existsSync(getProjectStatusPath(p.projectPath)),
+        })),
+      };
     },
   );
 
@@ -302,11 +352,7 @@ app.whenReady().then(() => {
         tablesDir,
         `${sanitizeTableFileName(tableName)}.json`,
       );
-      await writeFile(
-        tableFilePath,
-        JSON.stringify(payload, null, 2),
-        "utf-8",
-      );
+      await writeFile(tableFilePath, JSON.stringify(payload, null, 2), "utf-8");
     },
   );
 

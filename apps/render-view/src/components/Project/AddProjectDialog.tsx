@@ -42,7 +42,7 @@ export function AddProjectDialog() {
       pop();
     } catch (error) {
       console.error("Failed to add project:", error);
-      alert("프로젝트 추가에 실패했습니다.");
+      // alert("프로젝트 추가에 실패했습니다.");
     }
   };
 
@@ -71,7 +71,12 @@ export function AddProjectDialog() {
               placeholder="Select a folder"
               className={`${styles.input} ${styles.pathInput}`}
             />
-            <Button type="button" variant="none" size="m" onClick={handleBrowse}>
+            <Button
+              type="button"
+              variant="none"
+              size="m"
+              onClick={handleBrowse}
+            >
               Browse
             </Button>
           </div>

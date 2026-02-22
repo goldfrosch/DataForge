@@ -80,7 +80,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             styles.projectCardConnectedText,
             styles.projectCardConnected[
               project.isConnect ? "connect" : "disconnect"
-            ]
+            ],
           )}
         >
           <Wifi className={styles.projectCardConnectedIcon} />

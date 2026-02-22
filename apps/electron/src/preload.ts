@@ -3,6 +3,7 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("electronEvent", {
   ping: () => ipcRenderer.invoke("electron:ping"),
   loadAllProjects: () => ipcRenderer.invoke("electron:loadAllProjects"),
+  getConfigPath: () => ipcRenderer.invoke("electron:getConfigPath"),
   showOpenDirectoryDialog: () =>
     ipcRenderer.invoke("electron:showOpenDirectoryDialog"),
   addProject: (project: {

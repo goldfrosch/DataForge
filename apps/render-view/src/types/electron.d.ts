@@ -11,6 +11,7 @@ export interface IElectronAPI {
   electronEvent: {
     ping(): void;
     loadAllProjects(): Promise<{ projects: IProject[] }>;
+    getConfigPath(): Promise<string>;
     showOpenDirectoryDialog(): Promise<string | null>;
     addProject(project: {
       projectName: string;
