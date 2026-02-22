@@ -9,6 +9,7 @@ const projectCardLayoutBase = style({
   width: "100%",
   color: vars.color.foreground,
   borderColor: vars.color.border,
+  ...vars.font.sm,
 
   ":hover": {
     color: vars.color.accent,

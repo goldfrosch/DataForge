@@ -11,7 +11,7 @@ export const dropdownMenu = style({
   top: "100%",
   right: 0,
   marginTop: vars.size[1],
-  minWidth: "10rem",
+  minWidth: "11rem",
   padding: vars.size[1],
   backgroundColor: vars.color.popover,
   border: `1px solid ${vars.color.border}`,
@@ -53,10 +53,4 @@ export const dropdownItemIcon = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  selectors: {
-    "& svg": {
-      width: "100%",
-      height: "100%",
-    },
-  },
 });

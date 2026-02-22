@@ -1,10 +1,13 @@
-import { Database, MoreHorizontal, Wifi } from "lucide-react";
+import { useState } from "react";
+import { Database, MoreHorizontal, Pencil, Trash2, Wifi } from "lucide-react";
 import * as styles from "./ProjectCard.css";
-import { Chip } from "../@Common";
+import { Chip, Dropdown, type IDropdownItem } from "../@Common";
 import classNames from "classnames";
 import type { IProject } from "@/types/Project.type";
 import { useNavigate } from "react-router";
 import type { MouseEventHandler } from "react";
+import { usePopup } from "@/hooks/UsePopup.hook";
+import { POPUP_STATE } from "@/hooks/UseStore.hook";
 import { RenameProjectPopup } from "./RenameProjectPopup";
 import { DeleteProjectConfirmPopup } from "./DeleteProjectConfirmPopup";
 
@@ -25,9 +28,40 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const navigate = useNavigate();
+  const { push } = usePopup();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleClickProjectCard: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleRenameClick = () => {
+    setMenuOpen(false);
+    push(POPUP_STATE.RENAME_PROJECT_POPUP, false, project);
+  };
+
+  const handleDeleteClick = () => {
+    setMenuOpen(false);
+    push(POPUP_STATE.DELETE_PROJECT_POPUP, false, project);
+  };
+
+  const dropdownItems: IDropdownItem[] = [
+    {
+      label: "프로젝트 이름 수정",
+      icon: <Pencil size={14} />,
+      onClick: handleRenameClick,
+    },
+    {
+      label: "삭제",
+      icon: <Trash2 size={14} />,
+      danger: true,
+      onClick: handleDeleteClick,
+    },
+  ];
+
+  const handleClickProjectCard: MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
+
+    if (!project.isConnect) {
+      return;
+    }
+
     navigate(`/database/${project.uuid}`);
   };
 
@@ -47,12 +81,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <>
-      <button
+      <div
         className={
           styles.projectCardLayout[project.isConnect ? "enable" : "disable"]
         }
+        role="button"
         onClick={handleClickProjectCard}
-        disabled={!project.isConnect}
       >
         <div className={styles.projectCardHeader}>
           <div className={styles.projectCardInfoLayout}>
@@ -68,8 +102,32 @@ export function ProjectCard({ project }: ProjectCardProps) {
               </p>
             </div>
           </div>
-          <div className={styles.projectCardInfoOptionLayout}>
-            <MoreHorizontal className={styles.projectCardInfoOptionIcon} />
+          <div
+            className={styles.projectCardInfoOptionLayout}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Dropdown
+              open={menuOpen}
+              onOpenChange={setMenuOpen}
+              trigger={
+                <div
+                  className={styles.projectCardInfoOptionLayout}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setMenuOpen((p) => !p);
+                    }
+                  }}
+                >
+                  <MoreHorizontal
+                    className={styles.projectCardInfoOptionIcon}
+                  />
+                </div>
+              }
+              items={dropdownItems}
+            />
           </div>
         </div>
         <div className={styles.projectCardFooterLayout}>
@@ -92,7 +150,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <span>{project.isConnect ? "Connected" : "Disconnected"}</span>
           </span>
         </div>
-      </button>
+      </div>
       <RenameProjectPopup projectName={project.projectName} />
       <DeleteProjectConfirmPopup projectName={project.projectName} />
     </>
