@@ -4,6 +4,8 @@ import { create } from "zustand";
 export const POPUP_STATE = {
   DATABASE_ADD_TABLE_POPUP: "DATABASE_ADD_TABLE_POPUP",
   ADD_PROJECT_POPUP: "ADD_PROJECT_POPUP",
+  RENAME_PROJECT_POPUP: "RENAME_PROJECT_POPUP",
+  DELETE_PROJECT_POPUP: "DELETE_PROJECT_POPUP",
   EMPTY: "EMPTY",
 } as const;
 
@@ -18,7 +20,12 @@ interface IProjectState {
 
 interface IPopupState {
   popupStates: PopupState[];
-  pushPopup: (popupState: PopupState, isReplace: boolean) => void;
+  popupContext: IProject | null;
+  pushPopup: (
+    popupState: PopupState,
+    isReplace: boolean,
+    context?: IProject | null,
+  ) => void;
   popPopup: () => void;
 }
 
@@ -42,24 +49,21 @@ export const useProjectStore = create<IProjectState>((set) => ({
 
 export const usePopupStore = create<IPopupState>((set) => ({
   popupStates: [],
-  pushPopup: (popupState, isReplace) =>
+  popupContext: null,
+  pushPopup: (popupState, isReplace, context) =>
     set((state) => {
       const newPopupStates = [...state.popupStates];
-
       if (isReplace) {
         newPopupStates.pop();
-
-        return {
-          popupStates: [...newPopupStates, popupState],
-        };
       }
-
       return {
         popupStates: [...newPopupStates, popupState],
+        popupContext: context !== undefined ? context : state.popupContext,
       };
     }),
   popPopup: () =>
     set((state) => ({
       popupStates: state.popupStates.slice(0, -1),
+      popupContext: null,
     })),
 }));

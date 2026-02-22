@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "primary" | "none";
-  size: "s" |"m";
+  size: "s" | "m";
 }
 
 export function Button({
@@ -20,7 +20,7 @@ export function Button({
       className={classNames(
         styles.buttonStyle[variant],
         styles.buttonSize[size],
-        className
+        className,
       )}
     >
       {children}

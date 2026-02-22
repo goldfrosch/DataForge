@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ITableData } from "@/types/TableData.type";
+import type { IProject } from "@/types/Project.type";
+
 export const ELECTRON_EVENT_HOOK_KEY = {
   loadAllProjects: "loadAllProjects",
   getTables: "getTables",
@@ -31,6 +33,19 @@ export const useAddProjectMutation = () => {
       type: "unreal" | "unity";
       isConnect?: boolean;
     }) => window.electronEvent.addProject(project),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ELECTRON_EVENT_HOOK_KEY.loadAllProjects],
+      });
+    },
+  });
+};
+
+export const useSaveProjectsMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (config: { projects: IProject[] }) =>
+      window.electronEvent.saveProjects(config),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [ELECTRON_EVENT_HOOK_KEY.loadAllProjects],

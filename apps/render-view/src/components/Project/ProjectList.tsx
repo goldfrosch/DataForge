@@ -8,7 +8,6 @@ interface ProjectListProps {
 
 export function ProjectList({ list }: ProjectListProps) {
   if (list.length === 0) {
-    // TODO: 프로젝트 없을 때의 UI 따로 표현해주기
     return null;
   }
 
