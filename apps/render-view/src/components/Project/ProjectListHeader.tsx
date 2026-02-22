@@ -1,8 +1,16 @@
 import { Button } from "@/components/@Common";
 import * as styles from "./ProjectListHeader.css";
-import { Anvil, Download, Plus } from "lucide-react";
+import { Anvil, FolderOpen, Plus } from "lucide-react";
+import { usePopup } from "@/hooks/UsePopup.hook";
+import { POPUP_STATE } from "@/hooks/UseStore.hook";
 
 export function ProjectListHeader() {
+  const { push } = usePopup();
+
+  const handleAddProject = () => {
+    push(POPUP_STATE.ADD_PROJECT_POPUP);
+  };
+
   return (
     <div className={styles.projectListHeaderLayout}>
       <div className={styles.projectListHeaderContent}>
@@ -22,6 +30,7 @@ export function ProjectListHeader() {
           variant="primary"
           size="m"
           className={styles.projectListHeaderAddProjectButton}
+          onClick={handleAddProject}
         >
           <Plus />
           Add Project
@@ -30,8 +39,9 @@ export function ProjectListHeader() {
           variant="primary"
           size="m"
           className={styles.projectListHeaderAddProjectButton}
+          onClick={handleAddProject}
         >
-          <Download />
+          <FolderOpen />
           Load Project
         </Button>
       </div>

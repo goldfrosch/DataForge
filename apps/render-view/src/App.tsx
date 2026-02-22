@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     initialProject(data?.projects ?? []);
-  }, [isSuccess]);
+  }, [data?.projects, initialProject]);
 
   return (
     <DefaultLayout>

@@ -1,4 +1,4 @@
-type ProjectType = {
+export type ProjectType = {
   uuid: number;
   type: "unreal" | "unity";
   isConnect: boolean;

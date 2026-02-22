@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { readFile, writeFile, mkdir } from "fs/promises";
@@ -8,6 +8,7 @@ import type {
   DatabaseJsonType,
   TableType,
   TableDataJsonType,
+  ProjectType,
 } from "./types/config.type";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -63,18 +64,89 @@ app.on("activate", () => {
   }
 });
 
+function getConfigPath(): string {
+  return path.join(app.getPath("userData"), "dataforge-config.json");
+}
+
 app.whenReady().then(() => {
   ipcMain.handle("electron:ping", () => {
     console.log("pong!");
   });
 
-  ipcMain.handle("electron:loadAllProjects", async () => {
-    const result: ConfigType = JSON.parse(
-      await readFile(path.join(__dirname, "config.json"), "utf-8"),
-    );
-
-    return result;
+  ipcMain.handle("electron:loadAllProjects", async (): Promise<ConfigType> => {
+    const configPath = getConfigPath();
+    if (!existsSync(configPath)) {
+      return { projects: [] };
+    }
+    try {
+      const raw = await readFile(configPath, "utf-8");
+      return JSON.parse(raw) as ConfigType;
+    } catch {
+      return { projects: [] };
+    }
   });
+
+  ipcMain.handle(
+    "electron:saveProjects",
+    async (_, config: ConfigType): Promise<void> => {
+      const configPath = getConfigPath();
+      const dir = path.dirname(configPath);
+      if (!existsSync(dir)) {
+        await mkdir(dir, { recursive: true });
+      }
+      await writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
+    },
+  );
+
+  ipcMain.handle(
+    "electron:showOpenDirectoryDialog",
+    async (): Promise<string | null> => {
+      const result = await dialog.showOpenDialog(win!, {
+        properties: ["openDirectory"],
+        title: "Select project folder",
+      });
+      if (result.canceled || result.filePaths.length === 0) return null;
+      return result.filePaths[0];
+    },
+  );
+
+  ipcMain.handle(
+    "electron:addProject",
+    async (
+      _,
+      project: Omit<ProjectType, "uuid" | "tableCount"> & { uuid?: number },
+    ): Promise<ConfigType> => {
+      const configPath = getConfigPath();
+      let config: ConfigType = { projects: [] };
+      if (existsSync(configPath)) {
+        try {
+          const raw = await readFile(configPath, "utf-8");
+          config = JSON.parse(raw) as ConfigType;
+        } catch {
+          config = { projects: [] };
+        }
+      }
+      const maxUuid =
+        config.projects.length > 0
+          ? Math.max(...config.projects.map((p) => p.uuid))
+          : 0;
+      const newProject: ProjectType = {
+        projectName: project.projectName,
+        projectPath: project.projectPath,
+        type: project.type,
+        isConnect: project.isConnect ?? false,
+        uuid: project.uuid ?? maxUuid + 1,
+        tableCount: 0,
+      };
+      config.projects.push(newProject);
+      const dir = path.dirname(configPath);
+      if (!existsSync(dir)) {
+        await mkdir(dir, { recursive: true });
+      }
+      await writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
+      return config;
+    },
+  );
 
   ipcMain.handle("win:minimize", () => win?.minimize());
 

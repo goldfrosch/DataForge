@@ -10,7 +10,15 @@ import type { ITableData } from "./TableData.type";
 export interface IElectronAPI {
   electronEvent: {
     ping(): void;
-    loadAllProjects(): { projects: IProject[] };
+    loadAllProjects(): Promise<{ projects: IProject[] }>;
+    showOpenDirectoryDialog(): Promise<string | null>;
+    addProject(project: {
+      projectName: string;
+      projectPath: string;
+      type: "unreal" | "unity";
+      isConnect?: boolean;
+    }): Promise<{ projects: IProject[] }>;
+    saveProjects(config: { projects: IProject[] }): Promise<void>;
     createTable(projectPath: string, tableName: string): Promise<ITable[]>;
     getTables(projectPath: string): Promise<ITable[]>;
     getTableData(projectPath: string, tableName: string): Promise<ITableData | null>;

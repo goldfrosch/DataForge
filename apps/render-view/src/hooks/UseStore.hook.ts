@@ -3,6 +3,7 @@ import { create } from "zustand";
 
 export const POPUP_STATE = {
   DATABASE_ADD_TABLE_POPUP: "DATABASE_ADD_TABLE_POPUP",
+  ADD_PROJECT_POPUP: "ADD_PROJECT_POPUP",
   EMPTY: "EMPTY",
 } as const;
 

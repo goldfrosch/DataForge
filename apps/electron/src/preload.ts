@@ -3,6 +3,16 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("electronEvent", {
   ping: () => ipcRenderer.invoke("electron:ping"),
   loadAllProjects: () => ipcRenderer.invoke("electron:loadAllProjects"),
+  showOpenDirectoryDialog: () =>
+    ipcRenderer.invoke("electron:showOpenDirectoryDialog"),
+  addProject: (project: {
+    projectName: string;
+    projectPath: string;
+    type: "unreal" | "unity";
+    isConnect?: boolean;
+  }) => ipcRenderer.invoke("electron:addProject", project),
+  saveProjects: (config: { projects: unknown[] }) =>
+    ipcRenderer.invoke("electron:saveProjects", config),
   createTable: (projectPath: string, tableName: string) =>
     ipcRenderer.invoke("electron:createTable", projectPath, tableName),
   getTables: (projectPath: string) =>

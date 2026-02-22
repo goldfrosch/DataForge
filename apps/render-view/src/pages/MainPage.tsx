@@ -1,6 +1,7 @@
 import { ProjectList } from "@/components/Project/ProjectList";
 import { ProjectListInfo } from "@/components/Project/ProjectListInfo";
 import { ProjectListHeader } from "@/components/Project/ProjectListHeader";
+import { AddProjectDialog } from "@/components/Project/AddProjectDialog";
 import { useLoadAllProjectsHook } from "@/hooks/UseElectronEvent.hook";
 
 import * as styles from "./MainPage.css";
@@ -16,6 +17,7 @@ export function MainPage() {
       <main className={styles.mainPageLayout}>
         <ProjectList list={projects} />
       </main>
+      <AddProjectDialog />
     </>
   );
 }
