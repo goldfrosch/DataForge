@@ -147,7 +147,6 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
           </Button>
         </div>
       </div>
-
       <div className={styles.tableEditorGridWrap}>
         {columns.length === 0 ? (
           <div className={styles.tableEditorEmpty}>
@@ -158,44 +157,42 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
           </div>
         ) : (
           <table className={styles.tableEditorTable}>
-            <thead>
-              <tr>
-                {columns.map((col) => (
-                  <th key={col.id} className={styles.tableEditorTh}>
-                    <input
-                      type="text"
-                      value={col.name}
-                      onChange={(e) =>
-                        handleColumnChange(col.id, { name: e.target.value })
-                      }
-                      className={styles.tableEditorHeaderInput}
-                      placeholder="Column name"
-                    />
-                    <select
-                      value={col.type}
-                      onChange={(e) =>
-                        handleColumnChange(col.id, {
-                          type: e.target.value as IColumn["type"],
-                        })
-                      }
-                      className={styles.tableEditorHeaderSelect}
-                    >
-                      <option value="string">string</option>
-                      <option value="number">number</option>
-                      <option value="boolean">boolean</option>
-                    </select>
-                    <Button
-                      type="button"
-                      variant="none"
-                      size="s"
-                      className={styles.tableEditorThDelete}
-                      onClick={() => handleRemoveColumn(col)}
-                    >
-                      ×
-                    </Button>
-                  </th>
-                ))}
-              </tr>
+            <thead style={{ display: "flex" }}>
+              {columns.map((col) => (
+                <th key={col.id} className={styles.tableEditorTh}>
+                  <input
+                    type="text"
+                    value={col.name}
+                    onChange={(e) =>
+                      handleColumnChange(col.id, { name: e.target.value })
+                    }
+                    className={styles.tableEditorHeaderInput}
+                    placeholder="Column name"
+                  />
+                  <select
+                    value={col.type}
+                    onChange={(e) =>
+                      handleColumnChange(col.id, {
+                        type: e.target.value as IColumn["type"],
+                      })
+                    }
+                    className={styles.tableEditorHeaderSelect}
+                  >
+                    <option value="string">string</option>
+                    <option value="number">number</option>
+                    <option value="boolean">boolean</option>
+                  </select>
+                  <Button
+                    type="button"
+                    variant="none"
+                    size="s"
+                    className={styles.tableEditorThDelete}
+                    onClick={() => handleRemoveColumn(col)}
+                  >
+                    ×
+                  </Button>
+                </th>
+              ))}
             </thead>
             <tbody>
               {rows.map((row, rowIndex) => (

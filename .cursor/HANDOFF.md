@@ -13,100 +13,96 @@
 - **렌더러**: React + Vite + TypeScript, React Router, TanStack Query, Zustand, Vanilla Extract
 - **윈도우**: 커스텀 타이틀바(최소화/최대화/닫기), `win:maximize-changed` 등 창 이벤트 연동
 
-### 1.2 프로젝트(데이터베이스) 목록
+### 1.2 프로젝트 목록·추가·수정·삭제
 
-- **설정**: Electron 메인에서 `config.json` 읽어 프로젝트 목록 제공
-- **IPC**: `electron:loadAllProjects` → `ConfigType` (projects 배열) 반환
-- **UI**: 메인 페이지에서 프로젝트 카드 리스트 표시, 카드 클릭 시 `/database/:uuid` 이동
-- **상태**: `UseStore.hook`의 `useProjectStore`로 프로젝트 객체 보관, 앱 로드 시 `initialProject`로 주입
+- **설정 저장 위치**: `app.getPath("userData")` 아래 `dataforge-config.json`. 파일 없으면 `loadAllProjects` 시 빈 `{ projects: [] }`로 생성.
+- **IPC**
+  - `electron:loadAllProjects` → 프로젝트 목록 반환. **isConnect**는 config 값이 아니라 각 프로젝트 경로의 `.dataForge/status` 파일 존재 여부로 계산.
+  - `electron:getConfigPath` → 설정 파일 전체 경로 반환 (개발 시 로그/확인용)
+  - `electron:showOpenDirectoryDialog` → 폴더 선택 다이얼로그, 선택 경로 반환
+  - `electron:addProject`(project) → config에 프로젝트 추가 + **프로젝트 폴더에 `.dataForge` 디렉터리 및 `status` 바이너리 파일 생성**
+  - `electron:saveProjects`(config) → config 전체 덮어쓰기
+- **UI**
+  - 메인 페이지: 프로젝트 카드 리스트, **Add Project** / **Load Project** 버튼 → `AddProjectDialog` (폴더 선택 → 이름·엔진 타입 입력 → 추가)
+  - **ProjectCard** 옵션: Dropdown(⋯) → "프로젝트 이름 수정", "삭제" → **UsePopup** 플로우로 `RENAME_PROJECT_POPUP` / `DELETE_PROJECT_POPUP` + **popupContext**(대상 프로젝트)
+  - MainPage에서 `RenameProjectPopup`, `DeleteProjectConfirmPopup` 한 번만 렌더, `currentPopup`·`popupContext`·`pop()`으로 제어
+- **상태**: `useProjectStore`로 프로젝트 객체 보관, 앱 로드 시 `initialProject(data?.projects)` 주입. `useSaveProjectsMutation`으로 이름 수정·삭제 후 config 저장 및 목록 무효화.
 
-### 1.3 데이터베이스(프로젝트) 화면
+### 1.3 프로젝트 연결 상태(isConnect)
 
-- **라우트**: `/database/:uuid`, `useParams()`로 프로젝트 식별
-- **레이아웃**: 좌측 `DatabaseSelectAside` + 메인 영역
-- **Aside**: 뒤로가기(All Databases), 프로젝트 이름/경로 표시, 테이블 목록 헤더 + “테이블 추가” 버튼, Settings 버튼
-- **테이블 추가**: `TableDialog` 팝업에서 테이블 이름 입력 후 생성
-  - IPC `electron:createTable(projectPath, tableName)` 호출
-  - 프로젝트 경로 아래 `.dataForge/database.json`에 `tables[]` 유지, 새 테이블(`name`, `createdAt`) 추가
+- **규칙**: 프로젝트 디렉터리 내 `.dataForge/status` 파일이 **있으면** `isConnect: true`, **없으면** `false`.
+- **프로젝트 추가 시**: `addProject`에서 해당 경로에 `.dataForge` 폴더와 `status` 바이너리(매직+버전) 생성.
+- **목록 조회 시**: `loadAllProjects`가 config의 각 프로젝트에 대해 위 경로 존재 여부를 보고 isConnect 설정.
 
-### 1.4 백엔드(IPC) 상태
+### 1.4 데이터베이스(프로젝트) 화면·테이블
 
-- **구현된 핸들러**
-  - `electron:loadAllProjects` — config.json 기반 프로젝트 목록
-  - `electron:createTable` — `.dataForge/database.json`에 테이블 추가
-  - `electron:getTables` — 테이블 목록 반환 (아래 버그 참고)
-- **데이터 구조**: `TableType` { name, createdAt }, `DatabaseJsonType` { tables }
+- **라우트**: `/database/:uuid`, `useParams()`로 프로젝트 식별. 테이블 선택은 쿼리 `?table=테이블이름`.
+- **레이아웃**: 좌측 `DatabaseSelectAside` + 메인 영역.
+- **Aside**
+  - 뒤로가기(All Databases), 프로젝트 이름/경로
+  - **테이블 목록**: `useGetTablesHook(projectPath)`로 실제 테이블 목록 표시, 클릭 시 `setSearchParams({ table: tableName })`
+  - "테이블 추가" → `TableDialog` (POPUP_STATE.DATABASE_ADD_TABLE_POPUP)
+- **테이블 데이터**
+  - **저장 구조**: DB 단위 단일 바이너리 `.dataForge/database` (매직 + 버전 + MessagePack 직렬화). 테이블 메타·컬럼·행이 한 파일에 저장. 기존 `database.json` + `tables/*.json` 이 있으면 첫 읽기 시 자동 마이그레이션.
+  - **IPC**: `getTables`, `getTableData`, `saveTableData`, `createTable`. 경로는 모두 `.dataForge` 기준 통일.
+- **TableEditor** (메인 영역, `?table=` 있을 때): 컬럼 정의(이름·타입·삭제), 행 추가·셀 편집, Save로 `saveTableData` 호출.
+- **TableDialog**: 테이블 이름 입력 → `createTable` → `useInvalidateTablesHook`로 목록 갱신.
 
-### 1.5 알려진 이슈
+### 1.5 공통 컴포넌트·팝업 플로우
 
-- **테이블 목록 경로 불일치**: `createTable`은 `projectPath + ".dataForge"`를 쓰는데, `getTables`는 `projectPath + "dataForge"`(앞에 점 없음)를 사용함. 테이블 목록을 실제로 불러오려면 둘을 동일하게 맞춰야 함 (권장: `.dataForge`).
+- **@Common**: Button(variant: primary/none), Chip, Titlebar, **Dropdown**(trigger + items), Popup(타이틀·닫기·children).
+- **팝업 상태**: `UseStore.hook`의 `POPUP_STATE`(ADD_PROJECT, DATABASE_ADD_TABLE, RENAME_PROJECT, DELETE_PROJECT, EMPTY), `popupStates` 스택, **popupContext**(IProject | null).
+- **UsePopup**: `currentPopup`, `popupContext`, `push(state, isReplace?, context?)`, `pop()`. 이름 수정/삭제는 `push(..., project)`로 context 전달.
+
+### 1.6 훅·캐시 무효화
+
+- **UseElectronEvent.hook**: `useLoadAllProjectsHook`, `useGetTablesHook`, `useGetTableDataHook`, `useAddProjectMutation`, `useSaveProjectsMutation`, `useSaveTableDataMutation`, `useInvalidateTablesHook`, `useInvalidateProjectsHook`.  
+- **규칙**: `useQueryClient()`는 컴포넌트/페이지에서 직접 쓰지 않고, 무효화는 위 훅으로만 수행.
+
+### 1.7 백엔드(IPC) 요약
+
+| 핸들러 | 설명 |
+|--------|------|
+| electron:getConfigPath | 설정 파일 경로 반환 |
+| electron:loadAllProjects | userData/dataforge-config.json 읽기, isConnect는 .dataForge/status 존재 여부로 계산 |
+| electron:saveProjects | config 덮어쓰기 |
+| electron:showOpenDirectoryDialog | 폴더 선택 다이얼로그 |
+| electron:addProject | config 추가 + 프로젝트 경로에 .dataForge/status 생성 |
+| electron:createTable | .dataForge/database 바이너리에 빈 테이블(columns/rows 빈 배열) 추가 |
+| electron:getTables | .dataForge/database 바이너리에서 테이블 목록(메타) 반환 |
+| electron:getTableData | .dataForge/database 바이너리에서 해당 테이블 columns, rows 반환 |
+| electron:saveTableData | .dataForge/database 바이너리 내 해당 테이블 데이터 갱신 후 저장 |
+| win:* | minimize, toggleMaximize, isMaximized, close, maximize-changed |
 
 ---
 
 ## 2. 이어서 개발할 부분
 
-### 2.1 코드베이스 TODO (render-view)
+### 2.1 코드베이스 TODO (main.tsx 등)
 
-`apps/render-view/src/main.tsx`에 적힌 항목:
-
-1. **프로젝트를 통해 테이블 리스트 접근**
-   - Aside의 테이블 목록을 하드코딩이 아닌 `getTables(projectPath)` 결과로 표시
-   - `getTables` 경로 버그 수정 후, 훅(예: `useGetTables`)으로 불러와 Aside에 연동
-
-2. **테이블 row / column 정의**
-   - 테이블별 스키마(컬럼 타입, 이름) 및 row 데이터 모델 설계
-   - UI: 컬럼 추가·편집, row 추가·삭제 (또는 스키마 먼저, 그다음 데이터)
-
-3. **자동 id**
-   - row 식별용 자동 id 생성·관리 (스키마/저장 형식에 반영)
-
-4. **테이블 컬럼 중 table 참조**
-   - 컬럼 타입으로 “다른 테이블 참조” 지원, 참조 무결성 등
-
-5. **테이블 XLSX export**
-   - 선택 테이블(또는 전체)을 XLSX로 내보내기 (project-description의 3.3 Export 요구사항 일부)
-
-6. **프로젝트 사용 시 Unreal/Unity 프로젝트 설정**
-   - 우선 Unreal; 프로젝트 타입별 설정 화면 또는 설정 저장 구조
-
-7. **테이블 컬럼에서 class/blueprint 주입**
-   - Unreal 등 엔진 특화 타입(클래스, 블루프린트)을 컬럼 타입으로 지원 (3.4 Engine Asset Reference와 연결)
+1. **자동 id** — row 식별용 자동 id 생성·관리
+2. **테이블 컬럼 중 table 참조** — 컬럼 타입으로 다른 테이블 참조, 참조 무결성
+3. **테이블 XLSX export** — 선택 테이블/전체 XLSX 내보내기
+4. **프로젝트 사용 시 Unreal/Unity 프로젝트 설정** — 우선 Unreal
+5. **테이블 컬럼에서 class/blueprint 주입** — 엔진 특화 타입
 
 ### 2.2 project-description.md 기준 미구현
 
-- **4.1 Schema System**: 스키마 소스(엔진 리플렉션, JSON Schema, 코드 정의), 필드 타입/Required/Default/Range/Enum/Array·Map, 스키마 버전 관리 — 전부 미구현.
-- **4.2 Data Editing Layer**: Grid 기반 편집 UI, 타입별 셀 에디터(Enum, Asset Picker, Boolean, Number Range), Virtual Scroll — 미구현.
-- **4.3 Validation Engine**: 타입 검증, 필수값/Row Key 중복/참조 존재/스키마 불일치, Import 전 검증 — 미구현.
-- **4.4 Local Version Control**: Snapshot, Diff, Commit, Rollback, Branch — 문서에 “내부 모델”만 있고 구현 없음.
-- **3.3 Export**: CSV/XLSX/JSON Export — TODO에 XLSX만 명시됨, CSV·JSON은 추후.
-- **3.4 Engine Asset Reference**: Unreal(Asset Registry, SoftObjectPath, TSubclassOf 등), Unity(GUID, ScriptableObject 등) — 미구현.
+- **4.1 Schema System**: 스키마 소스, 필드 타입/Required/Default/Range/Enum/Array·Map, 스키마 버전 관리
+- **4.2 Data Editing Layer**: 타입별 셀 에디터(Enum, Asset Picker 등), Virtual Scroll
+- **4.3 Validation Engine**: 타입 검증, 필수값, Row Key 중복, 참조 존재, Import 전 검증
+- **4.4 Local Version Control**: Snapshot, Diff, Commit, Rollback, Branch
+- **3.3 Export**: CSV/JSON Export (XLSX는 TODO)
+- **3.4 Engine Asset Reference**: Unreal/Unity 에셋 탐색·참조
 
 ---
 
 ## 3. 권장 진행 순서
 
-1. **테이블 목록 연동**
-   - `getTables` 경로를 `.dataForge`로 통일
-   - render-view에서 `getTables` 호출 훅 추가 후 DatabaseSelectAside에 테이블 리스트 표시
-
-2. **테이블 스키마·데이터 모델**
-   - `.dataForge` 아래 스키마/테이블 데이터 파일 형식 정의 (예: schema.json + per-table json 또는 단일 database 확장)
-   - row/column 타입, 자동 id 설계
-
-3. **Grid 기반 편집 UI (4.2)**
-   - 선택한 테이블에 대한 스프레드시트형 그리드, 셀 편집, 필요 시 Virtual Scroll
-
-4. **Schema 시스템 (4.1)**
-   - 스키마 정의·버전·타입 제한을 코드/설정에 반영
-
-5. **Validation (4.3)**
-   - 저장/Import 전 검증 파이프라인
-
-6. **Export (3.3)**
-   - XLSX → CSV, JSON 순으로 확장
-
-7. **엔진 연동·버전 관리 (3.4, 4.4)**
-   - Unreal/Unity 설정 및 에셋 참조, 이후 로컬 버전 관리(스냅샷, 커밋 등)
+1. **테이블 고급 기능** — 자동 id, 테이블 참조 컬럼, XLSX export
+2. **Schema·Validation** — 스키마 정의·버전, 저장/Import 전 검증
+3. **Grid 고급 UI** — 셀 에디터, Virtual Scroll
+4. **엔진 연동·버전 관리** — Unreal/Unity 설정, 에셋 참조, 스냅샷/커밋
 
 ---
 
@@ -114,5 +110,7 @@
 
 - **프로젝트 설명**: [.cursor/project-description.md](.cursor/project-description.md)
 - **React/프론트 규칙**: [.cursor/skills/frontend/react-coding-standard.md](.cursor/skills/frontend/react-coding-standard.md)
-- **Electron 메인**: `apps/electron/src/main.ts` — IPC 핸들러, `config.json` 경로, `.dataForge` vs `dataForge` 경로 확인
-- **테이블 목록 UI**: `apps/render-view/src/components/Database/DatabaseSelectAside.tsx` — 현재 하드코딩된 테이블 영역을 API 연동 지점으로 보면 됨
+- **Electron 메인**: `apps/electron/src/main.ts`
+- **팝업·context**: `apps/render-view/src/hooks/UseStore.hook.ts` (POPUP_STATE, popupContext), `UsePopup.hook.ts`
+- **테이블 에디터**: `apps/render-view/src/components/Database/TableEditor/TableEditor.tsx`
+- **프로젝트 팝업**: `RenameProjectPopup`, `DeleteProjectConfirmPopup` (MainPage에서 렌더), `AddProjectDialog`
