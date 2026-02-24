@@ -6,6 +6,7 @@ import {
   useSaveTableDataMutation,
 } from "@/hooks/UseElectronEvent.hook";
 import type { IColumn, TableDataRow } from "@/types/TableData.type";
+import { DataTable } from "./DataTable";
 
 interface TableEditorProps {
   projectPath: string;
@@ -137,15 +138,15 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
           >
             Add row
           </Button>
-          <Button
-            variant="primary"
-            size="m"
-            onClick={handleSave}
-            disabled={saveMutation.isPending}
-          >
-            {saveMutation.isPending ? "Saving..." : "Save"}
-          </Button>
         </div>
+        <Button
+          variant="primary"
+          size="m"
+          onClick={handleSave}
+          disabled={saveMutation.isPending}
+        >
+          {saveMutation.isPending ? "Saving..." : "Save"}
+        </Button>
       </div>
       <div className={styles.tableEditorGridWrap}>
         {columns.length === 0 ? (
@@ -156,88 +157,13 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
             </Button>
           </div>
         ) : (
-          <table className={styles.tableEditorTable}>
-            <thead style={{ display: "flex" }}>
-              {columns.map((col) => (
-                <th key={col.id} className={styles.tableEditorTh}>
-                  <input
-                    type="text"
-                    value={col.name}
-                    onChange={(e) =>
-                      handleColumnChange(col.id, { name: e.target.value })
-                    }
-                    className={styles.tableEditorHeaderInput}
-                    placeholder="Column name"
-                  />
-                  <select
-                    value={col.type}
-                    onChange={(e) =>
-                      handleColumnChange(col.id, {
-                        type: e.target.value as IColumn["type"],
-                      })
-                    }
-                    className={styles.tableEditorHeaderSelect}
-                  >
-                    <option value="string">string</option>
-                    <option value="number">number</option>
-                    <option value="boolean">boolean</option>
-                  </select>
-                  <Button
-                    type="button"
-                    variant="none"
-                    size="s"
-                    className={styles.tableEditorThDelete}
-                    onClick={() => handleRemoveColumn(col)}
-                  >
-                    ×
-                  </Button>
-                </th>
-              ))}
-            </thead>
-            <tbody>
-              {rows.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {columns.map((col) => (
-                    <td key={col.id} className={styles.tableEditorTd}>
-                      {col.type === "boolean" ? (
-                        <input
-                          type="checkbox"
-                          checked={Boolean(row[col.name])}
-                          onChange={(e) =>
-                            handleCellChange(
-                              rowIndex,
-                              col.name,
-                              e.target.checked,
-                            )
-                          }
-                          className={styles.tableEditorInput}
-                        />
-                      ) : (
-                        <input
-                          type={col.type === "number" ? "number" : "text"}
-                          value={
-                            row[col.name] !== undefined &&
-                            row[col.name] !== null
-                              ? String(row[col.name])
-                              : ""
-                          }
-                          onChange={(e) => {
-                            const raw = e.target.value;
-                            const value =
-                              col.type === "number"
-                                ? (Number(raw) as number)
-                                : raw;
-                            handleCellChange(rowIndex, col.name, value);
-                          }}
-                          className={styles.tableEditorInput}
-                        />
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable
+            columns={columns}
+            rows={rows}
+            onColumnChange={handleColumnChange}
+            onRemoveColumn={handleRemoveColumn}
+            onCellChange={handleCellChange}
+          />
         )}
       </div>
     </div>

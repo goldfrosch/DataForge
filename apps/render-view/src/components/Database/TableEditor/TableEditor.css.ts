@@ -14,6 +14,8 @@ export const tableEditorToolbar = style({
   gap: vars.size[3],
   padding: `${vars.size[3]} ${vars.size[4]}`,
   borderBottom: `1px solid ${vars.color.border}`,
+  height: "8vh",
+  boxSizing: "border-box",
 });
 
 export const tableEditorTitle = style({
@@ -26,13 +28,14 @@ export const tableEditorTitle = style({
 export const tableEditorToolbarActions = style({
   display: "flex",
   alignItems: "center",
+  flex: 1,
   gap: vars.size[2],
 });
 
 export const tableEditorGridWrap = style({
-  flex: 1,
-  overflow: "auto",
+  height: "89vh",
   padding: vars.size[4],
+  boxSizing: "border-box",
 });
 
 export const tableEditorTable = style({
