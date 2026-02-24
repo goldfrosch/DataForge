@@ -84,6 +84,10 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
     setRows((prev) => [...prev, emptyRow(columns)]);
   };
 
+  const handleRemoveRow = (rowIndex: number) => {
+    setRows((prev) => prev.filter((_, index) => index !== rowIndex));
+  };
+
   const handleCellChange = (
     rowIndex: number,
     columnName: string,
@@ -163,6 +167,7 @@ export function TableEditor({ projectPath, tableName }: TableEditorProps) {
             onColumnChange={handleColumnChange}
             onRemoveColumn={handleRemoveColumn}
             onCellChange={handleCellChange}
+            onRemoveRow={handleRemoveRow}
           />
         )}
       </div>

@@ -27,6 +27,12 @@ export const dataTableHeader = style({
   minHeight: "3.5rem",
 });
 
+export const dataTableHeaderAction = style({
+  borderBottom: `2px solid ${vars.color.border}`,
+  borderRight: `1px solid ${vars.color.border}`,
+  backgroundColor: vars.color.muted,
+});
+
 export const dataTableHeaderInput = style({
   flex: 1,
   minWidth: "6rem",
@@ -82,6 +88,22 @@ export const dataTableInput = style({
     backgroundColor: vars.color.input,
     boxShadow: `inset 0 0 0 1px ${vars.color.ring}`,
   },
+});
+
+export const dataTableRowDeleteCell = style({
+  borderBottom: `1px solid ${vars.color.border}`,
+  borderRight: `1px solid ${vars.color.border}`,
+  backgroundColor: vars.color.background,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
+
+export const dataTableRowDeleteButton = style({
+  padding: vars.size[1],
+  minWidth: "unset",
+  fontSize: "1rem",
+  lineHeight: 1,
 });
 
 export const dataTableCheckbox = style({
